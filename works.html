@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Works | AROUND</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+
+/* ── STATS BAR ──────────────────────────────────────── */
+.works-stats {
+  background: var(--bg);
+  padding: 60px 48px;
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.stat-item {
+  flex: 1;
+  text-align: center;
+  padding: 24px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px);
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+}
+.stat-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 8px;
+  display: block;
+}
+
+/* ── FILTER BAR ─────────────────────────────────────── */
+.filter-section {
+  background: var(--bg-section);
+  padding: 32px 48px 0;
+  position: sticky;
+  top: 72px;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 16px;
+}
+.filter-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-btn {
+  padding: 8px 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.filter-btn:hover,
+.filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(45,212,168,0.05);
+}
+.filter-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255,255,255,0.08);
+  margin: 0 4px;
+}
+.result-count {
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.result-count span { color: var(--accent); }
+
+/* ── WORKS SECTION ──────────────────────────────────── */
+.works-section {
+  background: #080808;
+  padding: 48px 48px 80px;
+}
+.works-magazine {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px 24px;
+}
+
+/* ── POSTER CARD ─────────────────────────────────────── */
+.work-card {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.4s ease;
+}
+.work-card.hidden { display: none; }
+
+.poster-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.41;
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+.work-card:hover .poster-wrap {
+  transform: translateY(-10px) scale(1.02);
+}
+.poster-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: -16px; left: 8%; right: 8%;
+  height: 40px;
+  background: rgba(0,0,0,0.5);
+  filter: blur(16px);
+  border-radius: 50%;
+  transition: all 0.45s ease;
+  z-index: -1;
+}
+.work-card:hover .poster-wrap::after {
+  background: rgba(45,212,168,0.2);
+  filter: blur(24px);
+  bottom: -22px;
+}
+
+.poster-img {
+  width: 100%;
+  height: 100%;
+  background: #1c1c1c;
+  background-size: cover;
+  background-position: center top;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card-placeholder {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 60px;
+  color: rgba(45,212,168,0.1);
+}
+
+.poster-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.work-card:hover .poster-overlay { opacity: 1; }
+
+.overlay-icon {
+  width: 50px; height: 50px;
+  border: 1.5px solid rgba(45,212,168,0.8);
+  display: flex; align-items: center; justify-content: center;
+  transform: scale(0.7);
+  transition: transform 0.35s ease;
+}
+.work-card:hover .overlay-icon { transform: scale(1); }
+.overlay-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 2; }
+
+.card-info {
+  width: 100%;
+  padding: 14px 2px 0;
+}
+.card-category {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 3px;
+  color: var(--text);
+}
+.card-meta { font-size: 11px; color: var(--text-dim); }
+
+.work-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -8px;
+  width: 2px; height: 0;
+  background: var(--accent);
+  transition: height 0.4s ease;
+}
+.work-card:hover::before { height: calc(100% / 1.41); }
+
+/* ── LOAD MORE ──────────────────────────────────────── */
+.load-more-wrap { text-align: center; margin-top: 60px; }
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 48px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.load-more-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  z-index: -1;
+}
+.load-more-btn:hover { color: #000; border-color: var(--accent); }
+.load-more-btn:hover::before { transform: scaleX(1); }
+.load-more-btn.all-shown { display: none; }
+
+/* ── MODAL ──────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+  backdrop-filter: blur(8px);
+  padding: 24px;
+}
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: #111;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.4s ease;
+  border: 1px solid rgba(45,212,168,0.15);
+}
+.modal-overlay.active .modal-box { transform: translateY(0); }
+.modal-image {
+  width: 100%;
+  height: 380px;
+  background: linear-gradient(135deg, #1a1a1a, #222);
+  background-size: cover;
+  background-position: center;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.modal-image::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to top, #111, transparent);
+}
+.modal-placeholder {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px;
+  color: rgba(45,212,168,0.08);
+}
+.modal-body { padding: 40px; }
+.modal-category {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.modal-tag {
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.modal-desc {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+}
+.modal-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.05);
+}
+.modal-meta-item {
+  background: #111;
+  padding: 20px;
+  text-align: center;
+}
+.modal-meta-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.modal-meta-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  width: 44px; height: 44px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.6);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+.modal-close:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 968px) {
+  .works-stats { padding: 40px 24px; }
+  .works-section { padding: 32px 24px 60px; }
+  .filter-section { padding: 24px 24px 0; top: 64px; }
+  .works-magazine { grid-template-columns: repeat(3, 1fr); gap: 32px 16px; }
+  .modal-image { height: 240px; }
+  .modal-meta-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .works-magazine { grid-template-columns: repeat(2, 1fr); gap: 24px 12px; }
+  .filter-row { flex-direction: column; align-items: flex-start; }
+  .works-stats { flex-direction: column; }
+  .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">AROUND<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="works.html" class="active">Works</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-content">
+    <p class="page-hero-label">Portfolio</p>
+    <h1 class="page-hero-title">
+      SELECTED<br>
+      <span class="accent">WORKS</span>
+    </h1>
+    <p class="page-hero-sub">
+      350개 이상의 프로젝트 중 엄선한 작업물들을 소개합니다.<br>
+      이벤트, 마케팅, 콘텐츠 전 분야에 걸친 성과를 확인하세요.
+    </p>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="works-stats">
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="350">0</span>
+    <span class="stat-label">Total Projects</span>
+  </div>
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="10">0</span>
+    <span class="stat-label">Years of Experience</span>
+  </div>
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="50">0</span>
+    <span class="stat-label">Clients</span>
+  </div>
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="91">0</span>
+    <span class="stat-label">Satisfaction %</span>
+  </div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-section">
+  <div class="filter-row">
+    <div class="filter-group">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="event">Event</button>
+      <button class="filter-btn" data-cat="marketing">Marketing</button>
+      <button class="filter-btn" data-cat="contents">Contents</button>
+      <div class="filter-divider"></div>
+      <button class="filter-btn year-btn active" data-year="all">전체 연도</button>
+      <button class="filter-btn year-btn" data-year="2025">2025</button>
+      <button class="filter-btn year-btn" data-year="2024">2024</button>
+      <button class="filter-btn year-btn" data-year="2023">2023</button>
+    </div>
+    <div class="result-count"><span id="shownCount">7</span> / <span id="totalCount">12</span> Projects</div>
+  </div>
+</div>
+
+<!-- WORKS GRID -->
+<section class="works-section">
+  <div class="works-magazine" id="worksGrid">
+
+    <!-- 항상 표시 카드 1~7 -->
+    <div class="work-card reveal" data-cat="event" data-year="2025"
+         data-title="제11회 청소년 나Be한마당"
+         data-desc="대전시 청소년들을 위한 대규모 문화 축제 기획 및 운영. 무대 연출, 퍼포먼스 기획, 현장 운영 전반을 담당하여 약 3,000여 명의 관람객을 동원했습니다."
+         data-client="대전광역시" data-scale="3,000명+">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2025_works1.png')"><span class="card-placeholder">01</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2025</div>
+        <div class="card-title">제11회 청소년 나Be한마당</div>
+        <div class="card-meta">대전광역시</div>
+      </div>
+    </div>
+
+    <div class="work-card reveal" data-cat="marketing" data-year="2025"
+         data-title="약의날 기념행사"
+         data-desc="약사 직능단체의 연간 기념행사 기획 및 SNS 홍보 콘텐츠 제작. 행사 영상 및 사진 촬영, 온라인 채널 운영까지 원스톱 진행."
+         data-client="대한약사회" data-scale="500명+">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2025_works2.png')"><span class="card-placeholder">02</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Marketing · 2025</div>
+        <div class="card-title">약의날 기념행사</div>
+        <div class="card-meta">대한약사회</div>
+      </div>
+    </div>
+
+    <div class="work-card reveal" data-cat="event" data-year="2025"
+         data-title="야간개장 '우리함께夜' 문화공연"
+         data-desc="국립세종수목원 야간 개장 특별 문화공연 기획. 빛과 음악, 퍼포먼스가 어우러진 감성적인 야외 공연을 기획·연출했습니다."
+         data-client="국립세종수목원" data-scale="2,000명+">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2025_works3.png')"><span class="card-placeholder">03</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2025</div>
+        <div class="card-title">야간개장 '우리함께夜'</div>
+        <div class="card-meta">국립세종수목원</div>
+      </div>
+    </div>
+
+    <div class="work-card reveal" data-cat="event" data-year="2025"
+         data-title="서구 책 축제"
+         data-desc="대전 서구 지역 독서 문화 활성화를 위한 책 축제 기획 및 운영. 북 마켓, 저자 강연, 체험 프로그램 등 다채로운 프로그램 구성."
+         data-client="대전 서구청" data-scale="5,000명+">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2025_works4.png')"><span class="card-placeholder">04</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2025</div>
+        <div class="card-title">서구 책 축제</div>
+        <div class="card-meta">대전 서구청</div>
+      </div>
+    </div>
+
+    <div class="work-card reveal" data-cat="event" data-year="2025"
+         data-title="엑스포과학공원 사계절 행사"
+         data-desc="엑스포과학공원의 봄·여름·가을·겨울 4계절 정기 문화행사 연간 기획·운영. 재즈페스티벌, 과학 체험, 빛 축제 등 시즌별 테마 구성."
+         data-client="대전관광공사" data-scale="연 20,000명+">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2025_works5.png')"><span class="card-placeholder">05</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2025</div>
+        <div class="card-title">엑스포과학공원 사계절 행사</div>
+        <div class="card-meta">대전관광공사</div>
+      </div>
+    </div>
+
+    <div class="work-card reveal" data-cat="contents" data-year="2025"
+         data-title="K-사이언스월드 과학관광 프로그램"
+         data-desc="한국을 찾는 외국인 관광객을 대상으로 한 과학 관광 콘텐츠 개발. 홍보 영상, 가이드 북, SNS 채널 운영 전반을 담당."
+         data-client="과학기술정보통신부" data-scale="영상 50만 뷰">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2025_works6.png')"><span class="card-placeholder">06</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Contents · 2025</div>
+        <div class="card-title">K-사이언스월드</div>
+        <div class="card-meta">과학기술정보통신부</div>
+      </div>
+    </div>
+
+    <!-- 2024 작업물 11개 (더보기로 표시) -->
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="HELLO MAKER 2024"
+         data-desc="국립부산과학관에서 열린 메이커 문화 축제 기획 및 운영. 다양한 메이킹 체험 프로그램과 전시를 통해 과학기술의 재미를 알리는 행사."
+         data-client="국립부산과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works1.png')"><span class="card-placeholder">08</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">HELLO MAKER 2024</div>
+        <div class="card-meta">국립부산과학관</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="딜라잇 대전 가을밤 피크닉"
+         data-desc="대전시립미술관 야외광장에서 열린 가을 감성 야외 행사 기획 및 운영. 빛·음악·푸드가 어우러진 낭만적인 피크닉 이벤트. (2024.10.22~10.27)"
+         data-client="대전광역시·대전관광공사" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works2.png')"><span class="card-placeholder">09</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">딜라잇 대전 가을밤 피크닉</div>
+        <div class="card-meta">대전광역시·대전관광공사</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="스포츠인권의날 기념행사"
+         data-desc="문화체육관광부·KSPO 주관의 스포츠인권의날 기념행사 기획 및 운영. 기념식, 축사, 퍼포먼스, 우수사례 공모전 시상 등 공식 행사 총괄 진행. (2024.10.10)"
+         data-client="문화체육관광부·KSPO" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works3.png')"><span class="card-placeholder">10</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">스포츠인권의날 기념행사</div>
+        <div class="card-meta">문화체육관광부·KSPO</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="KAIST와 함께하는 유성 과학여행"
+         data-desc="유성구와 KAIST가 함께하는 1박 2일 청소년 과학여행 프로그램 기획 및 운영. 과학체험, 투어, 교육 프로그램 등으로 구성된 특별 행사. (2024.5.11~5.12)"
+         data-client="유성구" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works4.png')"><span class="card-placeholder">11</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">KAIST와 함께하는 유성 과학여행</div>
+        <div class="card-meta">유성구</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="아인슈타인 생일카페"
+         data-desc="아인슈타인 탄생일(3.14)을 기념한 팝업 생일카페 기획 및 운영. 국립중앙과학관 홀레이네이처에서 진행된 과학 감성 팝업 이벤트. (2024.3.14~3.16)"
+         data-client="국립중앙과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works5.png')"><span class="card-placeholder">12</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">아인슈타인 생일카페</div>
+        <div class="card-meta">국립중앙과학관</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="꽃핀데이"
+         data-desc="국립중앙과학관 생물탐구관의 다양한 포토존에서 꽃과 함께 인생샷을 찍고 꽃BTI 검사와 꽃말잇기 이벤트를 즐기는 봄 행사. (2024.3.30~4.7)"
+         data-client="국립중앙과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works6.png')"><span class="card-placeholder">13</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">꽃핀데이</div>
+        <div class="card-meta">국립중앙과학관</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="제1회 공룡박람회"
+         data-desc="6.1 세계 공룡의 날을 기념한 특별 나이트 행사. 공룡 공음과 랜덤 댄스 버스킹, 공룡 댄스파티, 공룡 DJ 네트워킹 파티 등 다채로운 프로그램으로 구성. (2024.6.1)"
+         data-client="국립중앙과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works7.png')"><span class="card-placeholder">14</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">제1회 공룡박람회</div>
+        <div class="card-meta">국립중앙과학관</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="과학 괴담회"
+         data-desc="과학 커뮤니케이터들의 과담 경연 및 심야 수장고 투어 연계 프로그램. 어두운 밤 수장고에서 펼쳐지는 오싹한 과학 이야기. (2024.8.9~10 / 8.15~17)"
+         data-client="국립중앙과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works8.png')"><span class="card-placeholder">15</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">과학 괴담회</div>
+        <div class="card-meta">국립중앙과학관</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="냥냥이 학술대회"
+         data-desc="Summer season 과학톡톡 시리즈 '냥냥이 학술대회'. 고양이 날 기념 과학 강연·전시·공연을 결합한 유쾌한 과학 문화 행사. (2024.8.2~3)"
+         data-client="국립중앙과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works9.png')"><span class="card-placeholder">16</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">냥냥이 학술대회</div>
+        <div class="card-meta">국립중앙과학관</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="죽은 과학자의 사회"
+         data-desc="과물입의 밤 11춘 2탄. 좀비·시체·죽은 과학자로 변신하는 핼러윈 분장 이벤트. 국립중앙과학관에서 열린 오싹하고 유쾌한 과학 파티. (2024.10.31)"
+         data-client="국립중앙과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works10.png')"><span class="card-placeholder">17</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">죽은 과학자의 사회</div>
+        <div class="card-meta">국립중앙과학관</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2024"
+         data-title="뉴턴 스칼라 마법 학교"
+         data-desc="수학을 마법으로 풀어낸 창의적인 교육 체험 행사. 마법의 물약가게, 드와이트의 마법석 상점, 마법사의 거커 등 스토리텔링 기반 수학 여행 프로그램. (2024)"
+         data-client="국립중앙과학관" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2024_works11.png')"><span class="card-placeholder">18</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2024</div>
+        <div class="card-title">뉴턴 스칼라 마법 학교</div>
+        <div class="card-meta">국립중앙과학관</div>
+      </div>
+    </div>
+
+    <!-- 2023 작업물 3개 (더보기로 표시) -->
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2023"
+         data-title="KAIST와 함께하는 유성 과학여행"
+         data-desc="유성구와 KAIST가 함께하는 1박 2일 초등학생 과학여행 프로그램. 과학프로젝트 수업, 과학 발명품 프로그램, 진로멘토링, 카이스트 캠퍼스투어 등으로 구성. (2023.10.28~10.29)"
+         data-client="유성구" data-scale="45가족">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2023_works1.png')"><span class="card-placeholder">19</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2023</div>
+        <div class="card-title">KAIST와 함께하는 유성 과학여행</div>
+        <div class="card-meta">유성구</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2023"
+         data-title="제9회 청소년 나Be한마당"
+         data-desc="2023년 진로직업 체험 박람회. 한빛광장, 이스포츠경기장, 대전콘텐츠코리아랩에서 열린 대규모 청소년 진로 체험 행사. 온·오프라인 진로특강 포함. (2023.10.12~10.13)"
+         data-client="유성구·대전광역시·DICIA" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2023_works2.png')"><span class="card-placeholder">20</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2023</div>
+        <div class="card-title">제9회 청소년 나Be한마당</div>
+        <div class="card-meta">유성구·대전광역시·DICIA</div>
+      </div>
+    </div>
+
+    <div class="work-card extra-row"
+         data-cat="event" data-year="2023"
+         data-title="스포츠인권의날 기념행사"
+         data-desc="스포츠인권의날 기념행사 기획 및 운영. 기념식, 축사, 퍼포먼스, 스포츠인권 우수사례 공모전 시상식 등 공식 행사 총괄 진행. (2023.10.12, 목포 신안비치호텔)"
+         data-client="문화체육관광부·KSPO" data-scale="-">
+      <div class="poster-wrap">
+        <div class="poster-img" style="background-image:url('images/2023_works3.png')"><span class="card-placeholder">21</span></div>
+        <div class="poster-overlay"><div class="overlay-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      </div>
+      <div class="card-info">
+        <div class="card-category">Event · 2023</div>
+        <div class="card-title">스포츠인권의날 기념행사</div>
+        <div class="card-meta">문화체육관광부·KSPO</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="load-more-wrap" style="display:none">
+    <button class="load-more-btn" id="loadMoreBtn">더 보기 <span id="remainCount"></span> →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-company">AROUND.</div>
+    <div class="footer-info">
+      <span>대전광역시 유성구 농대로 2번길 23, 1층</span>
+    </div>
+    <div class="footer-info">
+      <span>TEL. 042-551-5974</span>
+      <span>E-MAIL. weare@aroundkorea.kr</span>
+    </div>
+    <div class="footer-info">
+      <span>사업자등록번호 : 296-87-00825</span>
+      <span>대표 : 강병진</span>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">© 2026 AROUND. All rights reserved.</span>
+      <div class="footer-sns">
+        <a href="https://www.instagram.com/aroundkorea_/" target="_blank" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@aroundkorea4661" target="_blank" aria-label="YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-image" id="modalImage">
+      <span class="modal-placeholder" id="modalPlaceholder"></span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-category" id="modalCategory"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-tags" id="modalTags"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-meta-grid">
+        <div class="modal-meta-item">
+          <div class="modal-meta-label">Client</div>
+          <div class="modal-meta-value" id="modalClient"></div>
+        </div>
+        <div class="modal-meta-item">
+          <div class="modal-meta-label">Scale</div>
+          <div class="modal-meta-value" id="modalScale"></div>
+        </div>
+        <div class="modal-meta-item">
+          <div class="modal-meta-label">Year</div>
+          <div class="modal-meta-value" id="modalYear"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CURSOR & NAV
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top  = e.clientY + 'px';
+});
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── REVEAL
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting)
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+  });
+}, { threshold: 0.05 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ── COUNTER ANIMATION
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 1800;
+  const start = performance.now();
+  (function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(ease * target);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  })(start);
+}
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.counted) {
+      entry.target.dataset.counted = '1';
+      animateCounter(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-num').forEach(el => counterObs.observe(el));
+
+// ── FILTER
+let activeCat  = 'all';
+let activeYear = 'all';
+
+function applyFilter() {
+  const allCards = document.querySelectorAll('.work-card');
+  let shown = 0;
+  allCards.forEach(card => {
+    const catOk  = activeCat  === 'all' || card.dataset.cat  === activeCat;
+    const yearOk = activeYear === 'all' || card.dataset.year === activeYear;
+    if (catOk && yearOk) { card.classList.remove('hidden'); shown++; }
+    else card.classList.add('hidden');
+  });
+  document.getElementById('shownCount').textContent = shown;
+}
+
+document.querySelectorAll('[data-cat]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-cat]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    applyFilter();
+  });
+});
+document.querySelectorAll('.year-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeYear = btn.dataset.year;
+    applyFilter();
+  });
+});
+
+const totalCards = document.querySelectorAll('.work-card').length;
+document.getElementById('totalCount').textContent = totalCards;
+document.getElementById('shownCount').textContent = totalCards;
+
+// ── MODAL
+const modalOverlay = document.getElementById('modalOverlay');
+
+function openModal(card) {
+  document.getElementById('modalCategory').textContent = card.dataset.cat.toUpperCase() + ' · ' + card.dataset.year;
+  document.getElementById('modalTitle').textContent    = card.dataset.title;
+  document.getElementById('modalDesc').textContent     = card.dataset.desc;
+  document.getElementById('modalClient').textContent   = card.dataset.client;
+  document.getElementById('modalScale').textContent    = card.dataset.scale;
+  document.getElementById('modalYear').textContent     = card.dataset.year;
+  document.getElementById('modalPlaceholder').textContent = card.querySelector('.card-placeholder')?.textContent || '';
+
+  const bg = card.querySelector('.poster-img')?.style.backgroundImage || '';
+  const mi = document.getElementById('modalImage');
+  mi.style.backgroundImage = bg;
+  mi.style.backgroundSize = bg ? 'cover' : '';
+  mi.style.backgroundPosition = 'center top';
+
+  const tagsEl = document.getElementById('modalTags');
+  tagsEl.innerHTML = '';
+  [card.dataset.cat, card.dataset.year, card.dataset.client].filter(Boolean).forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'modal-tag';
+    s.textContent = t;
+    tagsEl.appendChild(s);
+  });
+
+  modalOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('worksGrid').addEventListener('click', e => {
+  const card = e.target.closest('.work-card');
+  if (card) openModal(card);
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

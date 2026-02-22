@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | AROUND</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* === CONTACT PAGE === */
+.contact-section {
+  background: var(--bg);
+  padding: 120px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.contact-left h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1;
+  margin-bottom: 32px;
+}
+
+.contact-info {
+  margin-top: 48px;
+}
+
+.contact-item {
+  padding: 20px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.contact-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+.contact-item-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  min-width: 80px;
+  padding-top: 2px;
+}
+
+.contact-item-value {
+  font-size: 16px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* FORM */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.form-input,
+.form-textarea {
+  background: var(--bg-section);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  padding: 16px 20px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: rgba(45,212,168,0.5);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.form-textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 40px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.form-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  z-index: -1;
+}
+
+.form-submit:hover { color: #fff; }
+.form-submit:hover::before { transform: scaleX(1); }
+
+/* MAP */
+.map-section {
+  background: var(--bg-section);
+  padding: 0 48px 120px;
+}
+
+.map-container {
+  position: relative;
+  height: 450px;
+  overflow: hidden;
+}
+
+.map-container iframe {
+  width: 100%; height: 100%;
+  border: none; display: block;
+  filter: grayscale(20%);
+}
+
+@media (max-width: 968px) {
+  .contact-section {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    padding: 80px 24px;
+  }
+  .map-section { padding: 0 24px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">AROUND<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="works.html">Works</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-content">
+    <p class="page-hero-label">Contact Us</p>
+    <h1 class="page-hero-title">
+      LET'S WORK<br>
+      <span class="accent">TOGETHER</span>
+    </h1>
+    <p class="page-hero-sub">
+      새로운 프로젝트를 시작하고 싶으시다면 언제든지 연락해주세요.
+      빠르게 답변드리겠습니다.
+    </p>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact-section">
+  <div class="contact-left reveal">
+    <p class="section-label">Get In Touch</p>
+    <h2>
+      문의하기
+    </h2>
+    <p style="color: var(--text-dim); font-size: 16px; line-height: 1.8;">
+      프로젝트 규모와 관계없이<br>
+      모든 문의를 환영합니다.
+    </p>
+    <div class="contact-info">
+      <div class="contact-item">
+        <span class="contact-item-label">Address</span>
+        <span class="contact-item-value">대전광역시 유성구 농대로 2번길 23, 1층 어라운드</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Phone</span>
+        <span class="contact-item-value">042-551-5974</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Email</span>
+        <span class="contact-item-value">weare@aroundkorea.kr</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">SNS</span>
+        <span class="contact-item-value">@aroundkorea_</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-form reveal">
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-input" placeholder="성함을 입력해주세요">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" placeholder="이메일을 입력해주세요">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Service</label>
+      <input type="text" class="form-input" placeholder="관심 있는 서비스 (이벤트 / 마케팅 / 콘텐츠)">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message</label>
+      <textarea class="form-textarea" placeholder="프로젝트에 대해 자유롭게 적어주세요"></textarea>
+    </div>
+    <button class="form-submit">Send Message →</button>
+  </div>
+</section>
+
+<!-- MAP -->
+<div class="map-section">
+  <div class="map-container reveal">
+    <iframe
+      src="https://map.naver.com/p/entry/address/36.374186,127.346648,대전광역시 유성구 농대로2번길 23?c=15.00,0,0,0,dh&embed=true"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-company">AROUND.</div>
+    <div class="footer-info"><span>대전광역시 유성구 농대로 2번길 23, 1층</span></div>
+    <div class="footer-info"><span>TEL. 042-551-5974</span><span>E-MAIL. weare@aroundkorea.kr</span></div>
+    <div class="footer-info"><span>사업자등록번호 : 296-87-00825</span><span>대표 : 강병진</span></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">© 2026 AROUND. All rights reserved.</span>
+      <div class="footer-sns">
+        <a href="https://www.instagram.com/aroundkorea_/" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.youtube.com/@aroundkorea4661" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// 폴백: 3초 후 미표시 요소 강제 표시
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+}, 3000);
+</script>
+</body>
+</html>

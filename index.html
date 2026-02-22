@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AROUND | 이벤트 기획 & 마케팅</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-section: #111111;
+  --text: #f0f0f0;
+  --text-dim: #888888;
+  --accent: #2DD4A8;
+  --accent-glow: rgba(45, 212, 168, 0.3);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+}
+
+.cursor-glow {
+  position: fixed;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,168,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 48px;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(45,212,168,0.1);
+  transition: all 0.4s ease;
+}
+nav.scrolled { padding: 16px 48px; background: rgba(10,10,10,0.95); }
+
+.logo {
+  font-family: 'Outfit', sans-serif; font-weight: 900;
+  font-size: 28px; letter-spacing: 4px;
+  color: var(--text); text-decoration: none;
+}
+.logo span { color: var(--accent); }
+
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-family: 'Outfit', sans-serif; font-weight: 600;
+  font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-dim); text-decoration: none;
+  transition: color 0.3s ease; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute;
+  bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--accent); transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  padding: 120px 48px 60px;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(45,212,168,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, rgba(255,215,0,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(26,190,142,0.08) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(45,212,168,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,212,168,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-content { text-align: center; z-index: 10; position: relative; }
+
+.hero-label {
+  font-family: 'Outfit', sans-serif; font-size: 14px;
+  letter-spacing: 8px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 1s 0.3s forwards;
+}
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 14vw, 200px);
+  line-height: 0.9; letter-spacing: -2px; margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 1s 0.5s forwards;
+}
+.hero-title .outline { -webkit-text-stroke: 2px var(--text); color: transparent; }
+.hero-title .fire {
+  color: var(--accent);
+  text-shadow: 0 0 60px var(--accent-glow), 0 0 120px rgba(45,212,168,0.15);
+}
+.hero-subtitle {
+  font-size: 18px; font-weight: 300;
+  color: var(--text-dim); letter-spacing: 2px;
+  max-width: 600px; margin: 0 auto 48px;
+  opacity: 0; animation: fadeUp 1s 0.7s forwards;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 40px;
+  border: 1px solid var(--accent); color: var(--accent);
+  text-decoration: none;
+  font-family: 'Outfit', sans-serif; font-weight: 600;
+  font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+  transition: all 0.4s ease; position: relative; overflow: hidden;
+  opacity: 0; animation: fadeUp 1s 0.9s forwards;
+}
+.hero-cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--accent); transform: scaleX(0);
+  transform-origin: left; transition: transform 0.4s ease; z-index: -1;
+}
+.hero-cta:hover { color: #fff; }
+.hero-cta:hover::before { transform: scaleX(1); }
+.hero-cta .arrow { transition: transform 0.3s ease; }
+.hero-cta:hover .arrow { transform: translateX(4px); }
+
+.scroll-indicator {
+  position: absolute; bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeUp 1s 1.2s forwards;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scrollPulse 2s infinite;
+}
+
+/* CLIENTS */
+.clients { background: var(--bg); padding: 80px 0; overflow: hidden; }
+.clients-label {
+  text-align: center;
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 32px; padding: 0 48px;
+}
+.client-track-wrapper {
+  width: 100%; overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+.client-track {
+  display: flex; gap: 0;
+  animation: marquee 30s linear infinite; width: max-content;
+}
+.client-logo {
+  flex-shrink: 0; padding: 28px 48px;
+  font-family: 'Outfit', sans-serif; font-weight: 700;
+  font-size: 18px; letter-spacing: 2px;
+  color: rgba(255,255,255,0.2); white-space: nowrap;
+  border: 1px solid rgba(255,255,255,0.05); transition: all 0.4s ease;
+}
+.client-logo:hover {
+  color: var(--accent); border-color: rgba(45,212,168,0.3);
+  background: rgba(45,212,168,0.05);
+}
+
+/* SERVICES PREVIEW */
+.home-services { background: var(--bg-section); padding: 100px 48px; }
+.section-label {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.home-services h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px); line-height: 1; margin-bottom: 60px;
+}
+.home-services h2 .accent { color: var(--accent); }
+.services-preview-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+}
+.service-preview-card {
+  padding: 60px 40px; background: var(--bg);
+  position: relative; overflow: hidden;
+  cursor: pointer; transition: all 0.5s ease;
+  min-height: 400px; display: flex; flex-direction: column;
+  justify-content: flex-end; text-decoration: none; color: var(--text);
+}
+/* 배경 이미지 레이어 */
+.service-preview-card::before {
+  content: ''; position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 0.6s ease; z-index: 0;
+}
+/* 다크 그라디언트 오버레이 */
+.service-preview-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.45) 100%);
+  opacity: 0; transition: opacity 0.6s ease; z-index: 1;
+}
+.service-preview-card:hover::before { opacity: 1; }
+.service-preview-card:hover::after { opacity: 1; }
+.service-preview-card:hover { border-color: var(--accent); }
+
+/* 카드별 배경 이미지 */
+.svc-event::before  { background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=900&q=80'); }
+.svc-marketing::before { background-image: url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=900&q=80'); }
+.svc-contents::before  { background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&q=80'); }
+
+.svc-bg {
+  position: absolute; top: 40px; left: 40px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 8vw, 120px); line-height: 0.85;
+  color: rgba(255,255,255,0.03); pointer-events: none; transition: color 0.5s ease;
+  z-index: 2;
+}
+.service-preview-card:hover .svc-bg { color: rgba(45,212,168,0.07); }
+.svc-icon { width: 48px; height: 48px; margin-bottom: 24px; position: relative; z-index: 2; }
+.svc-icon svg { width: 100%; height: 100%; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+.svc-num {
+  position: absolute; top: 40px; right: 40px;
+  font-family: 'Outfit', sans-serif; font-size: 14px;
+  color: rgba(255,255,255,0.15); letter-spacing: 2px; z-index: 2;
+}
+.svc-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 42px;
+  margin-bottom: 12px; position: relative; z-index: 2; transition: color 0.3s ease;
+}
+.service-preview-card:hover .svc-title { color: var(--accent); }
+.svc-desc { font-size: 14px; color: var(--text-dim); position: relative; z-index: 2; line-height: 1.7; }
+
+/* WORKS */
+.home-works { background: var(--bg); padding: 100px 48px; }
+.works-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 48px;
+}
+.works-header h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px); line-height: 1;
+}
+.works-header h2 .accent { color: var(--accent); }
+
+.view-all-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; border: 1px solid var(--accent);
+  color: var(--accent); text-decoration: none;
+  font-family: 'Outfit', sans-serif; font-weight: 600;
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  transition: all 0.4s ease; position: relative; overflow: hidden;
+}
+.view-all-btn::before {
+  content: ''; position: absolute; inset: 0; background: var(--accent);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; z-index: -1;
+}
+.view-all-btn:hover { color: #fff; }
+.view-all-btn:hover::before { transform: scaleX(1); }
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.work-item {
+  position: relative; overflow: hidden; cursor: pointer;
+  aspect-ratio: 2/3;
+}
+
+.work-img {
+  width: 100%; height: 100%;
+  background-size: cover; background-position: center;
+  transition: transform 0.7s ease;
+}
+.work-item:hover .work-img { transform: scale(1.07); }
+
+.work-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+  transition: background 0.4s ease;
+}
+.work-item:hover .work-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.05) 100%);
+}
+
+.work-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px; transform: translateY(6px); transition: transform 0.4s ease;
+}
+.work-item:hover .work-info { transform: translateY(0); }
+
+.work-category {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 5px;
+}
+.work-title {
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; line-height: 1.3;
+}
+.work-year { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
+
+/* CONTACT TEASER */
+.contact-teaser {
+  background: var(--bg-section); padding: 100px 48px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.contact-teaser-left h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px); line-height: 1; margin-bottom: 24px;
+}
+.contact-teaser-left h2 .accent { color: var(--accent); }
+.contact-teaser-left p {
+  color: var(--text-dim); font-size: 16px; line-height: 1.8; margin-bottom: 40px;
+}
+.contact-cta-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 18px 44px; background: var(--accent);
+  color: #000; text-decoration: none;
+  font-family: 'Outfit', sans-serif; font-weight: 700;
+  font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+.contact-cta-btn:hover { background: #fff; transform: translateY(-2px); }
+
+.contact-info-list { display: flex; flex-direction: column; }
+.contact-info-item {
+  display: flex; gap: 24px; align-items: flex-start;
+  padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.ci-label {
+  font-family: 'Outfit', sans-serif; font-size: 11px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); min-width: 80px; padding-top: 2px;
+}
+.ci-value { font-size: 16px; color: var(--text-dim); line-height: 1.6; }
+
+/* FOOTER */
+footer {
+  padding: 40px 48px;
+  background: var(--bg);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-company { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: 2px; margin-bottom: 6px; }
+.footer-info { display: flex; flex-wrap: wrap; gap: 0 20px; font-size: 12px; color: var(--text-dim); line-height: 2; }
+.footer-info span { white-space: nowrap; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+.footer-copyright { font-size: 11px; color: rgba(255,255,255,0.2); }
+.footer-sns { display: flex; gap: 16px; }
+.footer-sns a { color: rgba(255,255,255,0.25); text-decoration: none; transition: color 0.3s ease; display: flex; align-items: center; }
+.footer-sns a:hover { color: var(--accent); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform-origin: top; }
+  50% { opacity: 1; }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 968px) {
+  nav { padding: 16px 24px; }
+  .home-services, .home-works, .contact-teaser { padding: 80px 24px; }
+  .services-preview-grid { grid-template-columns: 1fr; }
+  .works-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .works-grid { grid-template-columns: 1fr; }
+  .contact-teaser { grid-template-columns: 1fr; gap: 48px; }
+  .works-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+}
+@media (max-width: 600px) {
+  .nav-links { gap: 20px; }
+  .nav-links a { font-size: 11px; letter-spacing: 2px; }
+}
+@media (max-width: 600px) {
+  .nav-links { gap: 20px; }
+  .nav-links a { font-size: 11px; letter-spacing: 2px; }
+}
+
+/* === HERO GAME === */
+.hero-game-zone {
+  width: 100%;
+  max-width: 900px;
+  margin: 32px auto 0;
+  height: 260px;
+  position: relative;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 260px;
+  cursor: pointer;
+}
+
+.game-hint {
+  position: absolute;
+  bottom: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(45,212,168,0.6);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+}
+
+.game-hint.hidden { opacity: 0; }
+
+.game-score-display {
+  position: absolute;
+  top: 8px;
+  right: calc(50% - 450px + 16px);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: rgba(45,212,168,0.5);
+  letter-spacing: 2px;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+@media (max-width: 968px) {
+  .game-score-display { right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">AROUND<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="works.html">Works</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <p class="hero-label">Event Planning & Marketing</p>
+    <h1 class="hero-title">
+      <span class="outline">WE CREATE</span><br>
+      <span class="fire">AROUND</span> <span class="outline">YOU</span>
+    </h1>
+    <p class="hero-subtitle">당신의 브랜드를 중심으로, 잊을 수 없는 경험을 만듭니다</p>
+    <a href="services.html" class="hero-cta">Explore Services <span class="arrow">→</span></a>
+  </div>
+  <div class="scroll-indicator"><div class="scroll-line"></div></div>
+
+  <!-- HERO GAME -->
+  <div class="hero-game-zone">
+    <div class="game-score-display" id="gameScore">SCORE: 0</div>
+    <div class="game-hint" id="gameHint">SPACE / CLICK — JUMP</div>
+    <canvas id="gameCanvas"></canvas>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients">
+  <p class="clients-label reveal">Trusted By</p>
+  <div class="client-track-wrapper">
+    <div class="client-track">
+      <div class="client-logo">대전광역시</div>
+      <div class="client-logo">대전관광공사</div>
+      <div class="client-logo">DICIA</div>
+      <div class="client-logo">충남콘텐츠진흥원</div>
+      <div class="client-logo">한국관광공사</div>
+      <div class="client-logo">대전컨벤션센터</div>
+      <div class="client-logo">과학기술정보통신부</div>
+      <div class="client-logo">문화체육관광부</div>
+      <div class="client-logo">대전광역시</div>
+      <div class="client-logo">대전관광공사</div>
+      <div class="client-logo">DICIA</div>
+      <div class="client-logo">충남콘텐츠진흥원</div>
+      <div class="client-logo">한국관광공사</div>
+      <div class="client-logo">대전컨벤션센터</div>
+      <div class="client-logo">과학기술정보통신부</div>
+      <div class="client-logo">문화체육관광부</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES PREVIEW -->
+<section class="home-services">
+  <p class="section-label reveal">Our Services</p>
+  <h2 class="reveal">WHAT WE <span class="accent">DO</span></h2>
+  <div class="services-preview-grid">
+    <a href="services.html#event" class="service-preview-card svc-event reveal">
+      <div class="svc-bg">EVENT<br>PLAN</div>
+      <div class="svc-num">01</div>
+      <div class="svc-icon"><svg viewBox="0 0 48 48"><path d="M24 4l6 12 13 2-9.5 9 2.5 13-12-6.5L13 40l2.5-13L6 18l13-2z"/></svg></div>
+      <div class="svc-title">EVENT PLANNING</div>
+      <div class="svc-desc">포럼, 전시, 페스티벌, 컨퍼런스 기획·운영</div>
+    </a>
+    <a href="services.html#marketing" class="service-preview-card svc-marketing reveal">
+      <div class="svc-bg">MARKE<br>TING</div>
+      <div class="svc-num">02</div>
+      <div class="svc-icon"><svg viewBox="0 0 48 48"><path d="M6 24h8l6-16 8 32 6-16h8"/></svg></div>
+      <div class="svc-title">MARKETING & PR</div>
+      <div class="svc-desc">디지털 마케팅, SNS 운영, 광고 캠페인</div>
+    </a>
+    <a href="services.html#contents" class="service-preview-card svc-contents reveal">
+      <div class="svc-bg">CONT<br>ENTS</div>
+      <div class="svc-num">03</div>
+      <div class="svc-icon"><svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="24" rx="2"/><polygon points="20,16 20,30 32,23"/></svg></div>
+      <div class="svc-title">CONTENTS</div>
+      <div class="svc-desc">영상, 사진, 그래픽 디자인, 웹 콘텐츠 제작</div>
+    </a>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="home-works">
+  <div class="works-header reveal">
+    <h2>SELECTED<br><span class="accent">WORKS</span></h2>
+    <a href="works.html" class="view-all-btn">View All →</a>
+  </div>
+  <div class="works-grid">
+    <!-- 1. 나Be한마당 -->
+    <div class="work-item reveal">
+      <div class="work-img" style="background-image: url('works1.png');"></div>
+      <div class="work-overlay"></div>
+      <div class="work-info">
+        <div class="work-title">제11회 청소년 나Be한마당</div>
+      </div>
+    </div>
+    <!-- 2. 약의날 행사 -->
+    <div class="work-item reveal">
+      <div class="work-img" style="background-image: url('works2.png'); background-color: #1a1a1a;"></div>
+      <div class="work-overlay"></div>
+      <div class="work-info">
+        <div class="work-title">약의날 기념행사</div>
+      </div>
+    </div>
+    <!-- 3. 국립세종수목원 야간공연 -->
+    <div class="work-item reveal">
+      <div class="work-img" style="background-image: url('works3.png'); background-color: #1a1a1a;"></div>
+      <div class="work-overlay"></div>
+      <div class="work-info">
+        <div class="work-title">야간개장 '우리함께夜' 문화공연</div>
+      </div>
+    </div>
+    <!-- 4. 서구 책 축제 -->
+    <div class="work-item reveal">
+      <div class="work-img" style="background-image: url('works4.png'); background-color: #1a1a1a;"></div>
+      <div class="work-overlay"></div>
+      <div class="work-info">
+        <div class="work-title">서구 책 축제</div>
+      </div>
+    </div>
+    <!-- 5. 엑스포 재즈 페스티벌 -->
+    <div class="work-item reveal">
+      <div class="work-img" style="background-image: url('works5.png'); background-color: #1a1a1a;"></div>
+      <div class="work-overlay"></div>
+      <div class="work-info">
+        <div class="work-title">엑스포과학공원 사계절 행사</div>
+      </div>
+    </div>
+    <!-- 6. K-사이언스월드 -->
+    <div class="work-item reveal">
+      <div class="work-img" style="background-image: url('works6.png'); background-color: #1a1a1a;"></div>
+      <div class="work-overlay"></div>
+      <div class="work-info">
+        <div class="work-title">K-사이언스월드 과학관광 프로그램</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT TEASER -->
+<section class="contact-teaser">
+  <div class="contact-teaser-left reveal">
+    <p class="section-label">Contact Us</p>
+    <h2>LET'S WORK<br><span class="accent">TOGETHER</span></h2>
+    <p>새로운 프로젝트를 시작하고 싶으시다면<br>언제든지 연락해주세요. 빠르게 답변드리겠습니다.</p>
+    <a href="contact.html" class="contact-cta-btn">문의하기 →</a>
+  </div>
+  <div class="contact-info-list reveal">
+    <div class="contact-info-item">
+      <span class="ci-label">Address</span>
+      <span class="ci-value">대전시 유성구 농대로 2번길 23<br>1층 어라운드</span>
+    </div>
+    <div class="contact-info-item">
+      <span class="ci-label">Phone</span>
+      <span class="ci-value">042-551-5974</span>
+    </div>
+    <div class="contact-info-item">
+      <span class="ci-label">Email</span>
+      <span class="ci-value">weare@aroundkorea.kr</span>
+    </div>
+    <div class="contact-info-item">
+      <span class="ci-label">SNS</span>
+      <span class="ci-value">@aroundkorea_</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-company">AROUND.</div>
+    <div class="footer-info"><span>대전광역시 유성구 농대로 2번길 23, 1층</span></div>
+    <div class="footer-info"><span>TEL. 042-551-5974</span><span>E-MAIL. weare@aroundkorea.kr</span></div>
+    <div class="footer-info"><span>사업자등록번호 : 296-87-00825</span><span>대표 : 강병진</span></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">© 2026 AROUND. All rights reserved.</span>
+      <div class="footer-sns">
+        <a href="https://www.instagram.com/aroundkorea_/" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.youtube.com/@aroundkorea4661" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+<script>
+// ============================================================
+//  AROUND RUNNER GAME
+//  \uc774\ubca4\ud2b8 \uae30\ud68d\uc790\uac00 \uc7a5\uc560\ubb3c(\ub9c8\uc774\ud06c·\uce74\uba54\ub77c·\uc870\uba85)\uc744 \ub6f0\uc5b4\ub118\ub294 \uac8c\uc784
+// ============================================================
+(function() {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx    = canvas.getContext('2d');
+  const hint   = document.getElementById('gameHint');
+  const scoreEl= document.getElementById('gameScore');
+
+  const ACCENT  = '#2DD4A8';
+  const DIMTEXT = 'rgba(45,212,168,0.35)';
+  const GROUND  = 220; // y position of ground line in canvas coords
+  const SCALE   = window.devicePixelRatio || 1;
+
+  let W, H;
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = Math.min(rect.width, 900);
+    H = 260;
+    canvas.width  = W * SCALE;
+    canvas.height = H * SCALE;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(SCALE, SCALE);
+  }
+  resize();
+  window.addEventListener('resize', () => { ctx.setTransform(1,0,0,1,0,0); resize(); });
+
+  // ─── STATE ───────────────────────────────────────────────
+  const STATE = { IDLE: 0, PLAYING: 1, DEAD: 2 };
+  let state   = STATE.IDLE;
+  let score   = 0;
+  let hiScore = 0;
+  let frame   = 0;
+  let speed   = 5.5;
+  let raf;
+
+  // ─── PLAYER ──────────────────────────────────────────────
+  const player = {
+    x: 80, y: GROUND, w: 22, h: 30,
+    vy: 0, onGround: true,
+    jumpPower: -14, gravity: 0.55,
+    legPhase: 0,
+    jump() {
+      if (this.onGround) {
+        this.vy = this.jumpPower;
+        this.onGround = false;
+      }
+    },
+    update() {
+      if (!this.onGround) {
+        this.vy += this.gravity;
+        this.y  += this.vy;
+        if (this.y >= GROUND) { this.y = GROUND; this.vy = 0; this.onGround = true; }
+      }
+      if (this.onGround) this.legPhase += 0.25;
+    },
+    draw() {
+      const px = this.x, py = this.y - this.h;
+      const run = this.onGround;
+
+      ctx.save();
+      // Shadow
+      ctx.fillStyle = 'rgba(45,212,168,0.12)';
+      ctx.beginPath();
+      ctx.ellipse(px, GROUND + 4, 14, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Body (suit)
+      ctx.fillStyle = ACCENT;
+      ctx.fillRect(px - 8, py + 8, 16, 14);
+
+      // Head
+      ctx.fillStyle = '#f0e0c0';
+      ctx.beginPath();
+      ctx.ellipse(px, py + 5, 8, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Hair
+      ctx.fillStyle = '#222';
+      ctx.beginPath();
+      ctx.ellipse(px, py - 1, 8, 5, 0, 0, Math.PI);
+      ctx.fill();
+
+      // Eyes (little dots)
+      ctx.fillStyle = '#333';
+      ctx.fillRect(px - 3, py + 4, 2, 2);
+      ctx.fillRect(px + 1, py + 4, 2, 2);
+
+      // Mouth (smile)
+      ctx.strokeStyle = '#a0501a';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(px, py + 8, 3, 0.1, Math.PI - 0.1);
+      ctx.stroke();
+
+      // Legs
+      const lp = this.legPhase;
+      const la = run ? Math.sin(lp) * 8 : 0;
+      const lb = run ? Math.sin(lp + Math.PI) * 8 : 0;
+      ctx.strokeStyle = '#1a9070';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      // left leg
+      ctx.beginPath();
+      ctx.moveTo(px - 3, py + 22);
+      ctx.lineTo(px - 3 + la * 0.5, py + 30 + Math.abs(la) * 0.1);
+      ctx.stroke();
+      // right leg
+      ctx.beginPath();
+      ctx.moveTo(px + 3, py + 22);
+      ctx.lineTo(px + 3 + lb * 0.5, py + 30 + Math.abs(lb) * 0.1);
+      ctx.stroke();
+
+      // Arms — one holding clipboard \ud83d\udccb
+      ctx.strokeStyle = '#1a9070';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(px - 8, py + 12);
+      ctx.lineTo(px - 18, py + 18);
+      ctx.stroke();
+      // clipboard
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(px - 23, py + 14, 8, 10);
+      ctx.strokeStyle = ACCENT;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(px - 23, py + 14, 8, 10);
+      ctx.fillStyle = ACCENT;
+      ctx.fillRect(px - 21, py + 16, 4, 1);
+      ctx.fillRect(px - 21, py + 18, 4, 1);
+      ctx.fillRect(px - 21, py + 20, 3, 1);
+
+      ctx.restore();
+    }
+  };
+
+  // ─── OBSTACLES ───────────────────────────────────────────
+  const OBSTACLE_TYPES = [
+    { name: 'mic',    w: 16, h: 38, draw: drawMic },
+    { name: 'camera', w: 28, h: 26, draw: drawCamera },
+    { name: 'light',  w: 14, h: 44, draw: drawLight },
+    { name: 'speaker',w: 24, h: 32, draw: drawSpeaker },
+  ];
+
+  function drawMic(x, y, w, h) {
+    ctx.save();
+    // Stand
+    ctx.strokeStyle = DIMTEXT;
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x + w/2, y + h); ctx.lineTo(x + w/2, y + h - 16); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x + 2, y + h - 16); ctx.lineTo(x + w - 2, y + h - 16); ctx.stroke();
+    // Mic body
+    ctx.fillStyle = ACCENT;
+    ctx.beginPath();
+    ctx.roundRect(x + w/2 - 5, y, 10, 22, 5);
+    ctx.fill();
+    // Grille lines
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth = 1;
+    for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(x+w/2-4, y+i*5); ctx.lineTo(x+w/2+4, y+i*5); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  function drawCamera(x, y, w, h) {
+    ctx.save();
+    // Body
+    ctx.fillStyle = '#333';
+    ctx.fillRect(x, y + 4, w, h - 4);
+    ctx.fillStyle = ACCENT;
+    ctx.fillRect(x, y + 4, w, 3);
+    // Lens
+    ctx.fillStyle = '#111';
+    ctx.beginPath(); ctx.arc(x + w/2 - 2, y + 4 + (h-4)/2, 7, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1a3a5a';
+    ctx.beginPath(); ctx.arc(x + w/2 - 2, y + 4 + (h-4)/2, 5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.beginPath(); ctx.arc(x + w/2 - 4, y + 4 + (h-4)/2 - 2, 2, 0, Math.PI*2); ctx.fill();
+    // Flash
+    ctx.fillStyle = ACCENT;
+    ctx.fillRect(x + w - 6, y, 5, 4);
+    // Tripod
+    ctx.strokeStyle = DIMTEXT; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x+w/2, y+h); ctx.lineTo(x+2, y+h+8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+w/2, y+h); ctx.lineTo(x+w-2, y+h+8); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawLight(x, y, w, h) {
+    ctx.save();
+    // Pole
+    ctx.strokeStyle = DIMTEXT; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x+w/2, y+h); ctx.lineTo(x+w/2, y+18); ctx.stroke();
+    // Light head
+    ctx.fillStyle = '#2a2a2a';
+    ctx.beginPath(); ctx.moveTo(x, y+18); ctx.lineTo(x+w, y+18); ctx.lineTo(x+w-2, y); ctx.lineTo(x+2, y); ctx.closePath(); ctx.fill();
+    // Glow
+    ctx.fillStyle = '#ffe066';
+    ctx.beginPath(); ctx.moveTo(x+2, y+2); ctx.lineTo(x+w-2, y+2); ctx.lineTo(x+w-4, y+16); ctx.lineTo(x+4, y+16); ctx.closePath(); ctx.fill();
+    // Beam
+    const grad = ctx.createLinearGradient(x+w/2, y+18, x+w/2, y+50);
+    grad.addColorStop(0, 'rgba(255,224,102,0.18)');
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.moveTo(x+2, y+18); ctx.lineTo(x+w-2, y+18); ctx.lineTo(x+w+12, y+h+20); ctx.lineTo(x-12, y+h+20); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawSpeaker(x, y, w, h) {
+    ctx.save();
+    ctx.fillStyle = '#1e1e1e';
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeStyle = ACCENT; ctx.lineWidth = 1.5;
+    ctx.strokeRect(x, y, w, h);
+    // Speaker cone
+    ctx.fillStyle = '#333';
+    ctx.beginPath(); ctx.arc(x+w/2, y+h/2, w/2-3, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#555';
+    ctx.beginPath(); ctx.arc(x+w/2, y+h/2, w/2-7, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = ACCENT;
+    ctx.beginPath(); ctx.arc(x+w/2, y+h/2, 4, 0, Math.PI*2); ctx.fill();
+    // Sound waves
+    ctx.strokeStyle = 'rgba(45,212,168,0.3)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(x+w+4, y+h/2, 6, -0.8, 0.8); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x+w+4, y+h/2, 10, -0.8, 0.8); ctx.stroke();
+    ctx.restore();
+  }
+
+  let obstacles = [];
+  let nextObstacleIn = 65;
+
+  function spawnObstacle() {
+    const rand = Math.random();
+    const tripleChance  = Math.min(0.35, score / 2000);
+    const doubleChance  = Math.min(0.55, 0.2 + score / 1000);
+
+    let count = 1;
+    if (rand < tripleChance) count = 3;
+    else if (rand < doubleChance) count = 2;
+
+    const COMBOS = [
+      [0, 3],    // 마이크 + 스피커
+      [2, 0],    // 조명 + 마이크
+      [1, 3],    // 카메라 + 스피커
+      [0, 3, 2], // 마이크 + 스피커 + 조명
+      [2, 0, 1], // 조명 + 마이크 + 카메라
+      [0, 1, 3], // 마이크 + 카메라 + 스피커
+    ];
+
+    if (count === 1) {
+      const type = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)];
+      obstacles.push({ x: W + 20, y: GROUND - type.h, w: type.w, h: type.h, draw: type.draw });
+    } else {
+      const combo = count === 2
+        ? COMBOS[Math.floor(Math.random() * 3)]
+        : COMBOS[3 + Math.floor(Math.random() * 3)];
+      let xPos = W + 20;
+      for (let i = 0; i < count; i++) {
+        const type = OBSTACLE_TYPES[combo[i]];
+        obstacles.push({ x: xPos, y: GROUND - type.h, w: type.w, h: type.h, draw: type.draw });
+        xPos += type.w + Math.floor(Math.random() * 25 + 50);
+      }
+    }
+  }
+
+  // ─── PARTICLES ───────────────────────────────────────────
+  let particles = [];
+  function spawnParticles(x, y) {
+    for (let i = 0; i < 12; i++) {
+      particles.push({
+        x, y, vx: (Math.random()-0.5)*6, vy: (Math.random()-0.5)*6,
+        life: 1, r: Math.random()*3+1
+      });
+    }
+  }
+
+  // ─── GROUND DETAIL ───────────────────────────────────────
+  let groundTiles = [];
+  for (let i = 0; i < 30; i++) groundTiles.push({ x: Math.random() * 900, w: Math.random()*20+5 });
+
+  // ─── DRAW HELPERS ────────────────────────────────────────
+  function drawGround() {
+    // Ground line
+    ctx.strokeStyle = 'rgba(45,212,168,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(W, GROUND); ctx.stroke();
+
+    // Moving dashes below
+    ctx.strokeStyle = 'rgba(45,212,168,0.12)';
+    ctx.lineWidth = 1;
+    groundTiles.forEach(t => {
+      ctx.beginPath(); ctx.moveTo(t.x, GROUND + 3); ctx.lineTo(t.x + t.w, GROUND + 3); ctx.stroke();
+      t.x -= speed * 0.4;
+      if (t.x + t.w < 0) t.x = W + Math.random()*100;
+    });
+  }
+
+  function drawIdleScreen() {
+    ctx.clearRect(0, 0, W, H);
+    drawGround();
+    // Idle bob
+    player.y = GROUND + Math.sin(frame * 0.04) * 2;
+    player.draw();
+    // Dotted line ahead
+    ctx.setLineDash([4, 8]);
+    ctx.strokeStyle = 'rgba(45,212,168,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(player.x + 20, GROUND - 15); ctx.lineTo(W - 40, GROUND - 15); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function drawDeadScreen() {
+    ctx.clearRect(0, 0, W, H);
+    drawGround();
+    player.draw();
+    obstacles.forEach(o => o.draw(o.x, o.y, o.w, o.h));
+    // Flash overlay
+    if (frame % 30 < 15) {
+      ctx.fillStyle = 'rgba(45,212,168,0.04)';
+      ctx.fillRect(0, 0, W, H);
+    }
+    // Retry text
+    ctx.fillStyle = 'rgba(45,212,168,0.7)';
+    ctx.font = '700 13px Outfit';
+    ctx.letterSpacing = '4px';
+    ctx.textAlign = 'center';
+    ctx.fillText('SPACE / CLICK — RETRY', W/2, GROUND - 24);
+    ctx.textAlign = 'left';
+    ctx.letterSpacing = '0px';
+  }
+
+  // ─── COLLISION ───────────────────────────────────────────
+  function checkCollision() {
+    const px = player.x - 7, py = player.y - player.h + 4;
+    const pw = 14, ph = player.h - 6;
+    for (const o of obstacles) {
+      if (px < o.x + o.w - 4 && px + pw > o.x + 4 && py < o.y + o.h - 4 && py + ph > o.y + 4) return true;
+    }
+    return false;
+  }
+
+  // ─── MAIN LOOP ────────────────────────────────────────────
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    frame++;
+    ctx.clearRect(0, 0, W, H);
+
+    if (state === STATE.IDLE) { drawIdleScreen(); return; }
+    if (state === STATE.DEAD) { drawDeadScreen(); return; }
+
+    // Speed ramp
+    speed = 5.5 + Math.floor(score / 300) * 0.5;
+
+    // Ground
+    drawGround();
+
+    // Obstacles
+    nextObstacleIn--;
+    if (nextObstacleIn <= 0) {
+      spawnObstacle();
+      const minGap = Math.max(60, 110 - score / 50);
+      nextObstacleIn = Math.floor(Math.random() * 40 + minGap);
+    }
+    obstacles.forEach(o => { o.x -= speed; o.draw(o.x, o.y, o.w, o.h); });
+    obstacles = obstacles.filter(o => o.x + o.w > -10);
+
+    // Player
+    player.update();
+    player.draw();
+
+    // Particles
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.life -= 0.05;
+      ctx.fillStyle = `rgba(45,212,168,${p.life * 0.8})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+    });
+    particles = particles.filter(p => p.life > 0);
+
+    // Score milestone flash
+    const prev = score;
+    score++;
+    if (Math.floor(score/500) > Math.floor(prev/500)) spawnParticles(player.x, player.y - player.h/2);
+
+    // Update score display
+    scoreEl.textContent = `SCORE: ${score}`;
+    scoreEl.style.color = score > 0 && score % 500 < 30 ? ACCENT : 'rgba(45,212,168,0.5)';
+
+    // Collision
+    if (checkCollision()) {
+      if (score > hiScore) hiScore = score;
+      spawnParticles(player.x, player.y - player.h/2);
+      state = STATE.DEAD;
+      scoreEl.textContent = `SCORE: ${score}  ·  BEST: ${hiScore}`;
+      scoreEl.style.color = ACCENT;
+    }
+  }
+
+  // ─── CONTROLS ────────────────────────────────────────────
+  function handleInput() {
+    if (state === STATE.IDLE) {
+      state = STATE.PLAYING;
+      score = 0; obstacles = []; speed = 5.5; nextObstacleIn = 80;
+      player.y = GROUND; player.vy = 0; player.onGround = true;
+      hint.classList.add('hidden');
+      player.jump();
+    } else if (state === STATE.PLAYING) {
+      player.jump();
+    } else if (state === STATE.DEAD) {
+      state = STATE.PLAYING;
+      score = 0; obstacles = []; speed = 5.5; nextObstacleIn = 80;
+      player.y = GROUND; player.vy = 0; player.onGround = true;
+      scoreEl.textContent = 'SCORE: 0';
+      scoreEl.style.color = 'rgba(45,212,168,0.5)';
+      player.jump();
+    }
+  }
+
+  document.addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); handleInput(); } });
+  canvas.addEventListener('click', handleInput);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); handleInput(); }, { passive: false });
+
+  // Start loop
+  loop();
+})();
+</script>
+</body>
+</html>

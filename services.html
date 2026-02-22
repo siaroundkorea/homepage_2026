@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services | AROUND</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-section: #111111;
+  --text: #f0f0f0;
+  --text-dim: #888888;
+  --accent: #2DD4A8;
+  --accent-glow: rgba(45, 212, 168, 0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+}
+
+/* CURSOR */
+.cursor-glow {
+  position: fixed; width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,168,0.08) 0%, transparent 70%);
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 48px;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(45,212,168,0.1);
+  transition: all 0.4s ease;
+}
+nav.scrolled { padding: 16px 48px; background: rgba(10,10,10,0.95); }
+.logo {
+  font-family: 'Outfit', sans-serif; font-weight: 900;
+  font-size: 28px; letter-spacing: 4px;
+  color: var(--text); text-decoration: none;
+}
+.logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-family: 'Outfit', sans-serif; font-weight: 600;
+  font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-dim); text-decoration: none;
+  transition: color 0.3s ease; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute;
+  bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--accent); transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav-links a.active { color: var(--accent); }
+
+/* PAGE HERO */
+.page-hero {
+  height: 70vh; min-height: 500px;
+  display: flex; align-items: flex-end;
+  padding: 0 48px 80px;
+  position: relative; overflow: hidden;
+}
+.hero-bg-img {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=80') center/cover no-repeat;
+}
+.hero-bg-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.3) 100%);
+}
+.hero-bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(45,212,168,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,212,168,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-content { position: relative; z-index: 10; }
+.hero-label {
+  font-family: 'Outfit', sans-serif; font-size: 13px;
+  letter-spacing: 8px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
+}
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(70px, 12vw, 160px);
+  line-height: 0.9; margin-bottom: 24px;
+}
+.hero-title .outline { -webkit-text-stroke: 2px var(--text); color: transparent; }
+.hero-title .accent { color: var(--accent); }
+.hero-sub {
+  font-size: 16px; color: var(--text-dim);
+  max-width: 560px; line-height: 1.8;
+}
+
+/* INTRO */
+.intro {
+  padding: 100px 48px;
+  background: var(--bg);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.intro-left .section-label {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.intro-left h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 64px); line-height: 1; margin-bottom: 28px;
+}
+.intro-left h2 .accent { color: var(--accent); }
+.intro-left p {
+  font-size: 16px; color: var(--text-dim); line-height: 1.9; margin-bottom: 16px;
+}
+.intro-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; margin-top: 48px;
+}
+.stat-box {
+  padding: 28px 24px; background: var(--bg-section);
+  border-top: 2px solid var(--accent);
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; color: var(--accent); line-height: 1;
+}
+.stat-label {
+  font-size: 12px; color: var(--text-dim);
+  margin-top: 6px; line-height: 1.4;
+}
+.intro-right {
+  position: relative;
+}
+.intro-img-main {
+  width: 100%; aspect-ratio: 3/4;
+  background: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80') center/cover;
+}
+.intro-img-badge {
+  position: absolute; bottom: -20px; left: -20px;
+  padding: 20px 28px; background: var(--accent);
+  color: #000;
+}
+.intro-img-badge .badge-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 40px; line-height: 1;
+}
+.intro-img-badge .badge-text {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-top: 4px;
+}
+
+/* EVENT TYPES */
+.event-types {
+  background: var(--bg-section);
+  padding: 100px 48px;
+}
+.event-types-header {
+  margin-bottom: 60px;
+}
+.event-types-header .section-label {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.event-types-header h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px); line-height: 1;
+}
+.event-types-header h2 .accent { color: var(--accent); }
+
+/* 이벤트 타입 리스트 - 가로형 풀스크린 스타일 */
+.event-type-list { display: flex; flex-direction: column; gap: 2px; }
+
+.event-type-item {
+  display: grid; text-decoration: none; color: var(--text); grid-template-columns: 80px 1fr 2fr auto;
+  align-items: center; gap: 40px;
+  padding: 36px 40px;
+  background: var(--bg);
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: all 0.5s ease;
+  border-left: 2px solid transparent;
+  text-decoration: none; color: var(--text);
+}
+.event-type-item::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 0.6s ease;
+  z-index: 0;
+}
+.event-type-item::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 60%, transparent 100%);
+  opacity: 0; transition: opacity 0.6s ease; z-index: 1;
+}
+.event-type-item:hover { border-left-color: var(--accent); }
+.event-type-item:hover::before { opacity: 1; }
+.event-type-item:hover::after { opacity: 1; }
+.event-type-item:hover .eti-num { color: var(--accent); }
+.event-type-item:hover .eti-title { color: var(--accent); }
+.event-type-item:hover .eti-arrow { transform: translateY(-50%) translateX(8px); color: var(--accent); }
+.event-type-item:hover .eti-tag { border-color: rgba(45,212,168,0.3); color: var(--accent); }
+
+/* 각 타입별 배경 이미지 */
+.eti-festival::before { background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&q=80'); }
+.eti-performance::before { background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1200&q=80'); }
+.eti-science::before { background-image: url('https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=1200&q=80'); }
+.eti-night::before { background-image: url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80'); }
+.eti-culture::before { background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&q=80'); }
+.eti-youth::before { background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=80'); }
+
+.eti-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 32px;
+  color: rgba(255,255,255,0.15); transition: color 0.3s ease;
+  position: relative; z-index: 2;
+}
+.eti-title-wrap { position: relative; z-index: 2; }
+.eti-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 36px;
+  line-height: 1; transition: color 0.3s ease;
+}
+.eti-sub {
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); margin-top: 6px;
+}
+.eti-desc {
+  font-size: 14px; color: var(--text-dim); line-height: 1.7;
+  position: relative; z-index: 2;
+}
+.eti-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  position: relative; z-index: 2; justify-content: flex-end;
+}
+.eti-tag {
+  padding: 5px 12px; font-size: 10px;
+  letter-spacing: 2px; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-dim); white-space: nowrap;
+  transition: all 0.3s ease;
+}
+.event-type-item:hover .eti-tag {
+  border-color: rgba(45,212,168,0.3); color: var(--accent);
+}
+.eti-arrow {
+  position: absolute; right: 40px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px; color: rgba(255,255,255,0.2);
+  transition: all 0.3s ease; z-index: 2;
+}
+
+/* SERVICE PROCESS BLOCKS */
+.svc-process { display: flex; flex-direction: column; }
+
+.svc-block { padding: 80px 48px; background: var(--bg); }
+.svc-block-alt { background: var(--bg-section); }
+
+.svc-block-header {
+  display: flex; align-items: flex-start;
+  gap: 36px; margin-bottom: 48px;
+}
+.svc-block-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 100px; line-height: 0.85;
+  color: rgba(45,212,168,0.08); flex-shrink: 0;
+}
+.svc-block-label {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+}
+.svc-block-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 4vw, 56px); line-height: 1; margin-bottom: 8px;
+}
+.svc-block-sub { font-size: 14px; color: var(--text-dim); letter-spacing: 2px; }
+
+/* 가로 5칸 그리드 */
+.svc-steps {
+  display: grid;
+  grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr 24px 1fr;
+  align-items: stretch; gap: 0;
+}
+
+.svc-step {
+  position: relative; overflow: hidden;
+  min-height: 280px; cursor: pointer;
+  border-top: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+.svc-block-alt .svc-step { background: var(--bg); }
+.svc-step:not(.svc-block-alt .svc-step) { background: var(--bg-section); }
+
+/* 배경 이미지 */
+.svc-step::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 0.55s ease; z-index: 0;
+}
+.svc-step::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.93) 0%, rgba(10,10,10,0.55) 100%);
+  opacity: 0; transition: opacity 0.55s ease; z-index: 1;
+}
+.svc-step:hover { border-top-color: var(--accent); }
+.svc-step:hover::before { opacity: 1; }
+.svc-step:hover::after { opacity: 1; }
+.svc-step:hover .svc-step-name { color: var(--accent); }
+
+.svc-step-inner {
+  position: relative; z-index: 2;
+  padding: 32px 24px;
+  height: 100%; display: flex; flex-direction: column;
+}
+.svc-step-num {
+  font-family: 'Outfit', sans-serif; font-size: 10px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.svc-step-name {
+  font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700;
+  line-height: 1.3; margin-bottom: 16px;
+  transition: color 0.3s ease; flex: 1;
+}
+.svc-step-desc {
+  font-size: 13px; color: var(--text-dim); line-height: 1.8;
+}
+
+.svc-step-arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--accent); opacity: 0.4;
+}
+
+/* 블록01 이미지 */
+.svc-01-01::before { background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80'); }
+.svc-01-02::before { background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80'); }
+.svc-01-03::before { background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80'); }
+.svc-01-04::before { background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800&q=80'); }
+.svc-01-05::before { background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80'); }
+
+/* 블록02 이미지 */
+.svc-02-01::before { background-image: url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80'); }
+.svc-02-02::before { background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80'); }
+.svc-02-03::before { background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80'); }
+.svc-02-04::before { background-image: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80'); }
+.svc-02-05::before { background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80'); }
+
+/* 블록03 이미지 */
+.svc-03-01::before { background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?w=800&q=80'); }
+.svc-03-02::before { background-image: url('https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&q=80'); }
+.svc-03-03::before { background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80'); }
+.svc-03-04::before { background-image: url('https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80'); }
+.svc-03-05::before { background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80'); }
+
+
+.highlight {
+  padding: 100px 48px;
+  background: var(--bg);
+}
+.highlight-header { margin-bottom: 60px; }
+.highlight-header .section-label {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.highlight-header h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px); line-height: 1;
+}
+.highlight-header h2 .accent { color: var(--accent); }
+
+.highlight-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+}
+.highlight-card {
+  position: relative; overflow: hidden;
+  aspect-ratio: 2/3;
+  display: block;
+  text-decoration: none; color: var(--text);
+  cursor: pointer;
+}
+
+.hl-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.7s ease;
+}
+.highlight-card:hover .hl-img { transform: scale(1.06); }
+
+.hl-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+}
+.hl-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px;
+}
+.hl-badge {
+  display: inline-block;
+  padding: 3px 8px; background: var(--accent);
+  color: #000; font-size: 9px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.hl-title {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  font-weight: 700; line-height: 1.3;
+}
+.hl-stat { display: none; }
+
+/* PROCESS */
+.process {
+  background: var(--bg-section);
+  padding: 100px 48px;
+}
+.process .section-label {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.process h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px); line-height: 1; margin-bottom: 64px;
+}
+.process h2 .accent { color: var(--accent); }
+.process-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+}
+.process-step {
+  padding: 48px 36px; background: var(--bg);
+  position: relative; overflow: hidden;
+  border-top: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+.process-step:hover { border-top-color: var(--accent); }
+.process-step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 90px; color: rgba(45,212,168,0.07);
+  line-height: 1; margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+.process-step:hover .process-step-num { color: rgba(45,212,168,0.14); }
+.process-step-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px; color: var(--text);
+  margin-bottom: 16px; transition: color 0.3s ease;
+}
+.process-step:hover .process-step-title { color: var(--accent); }
+.process-step-desc {
+  font-size: 14px; line-height: 1.8; color: var(--text-dim);
+}
+.process-arrow {
+  position: absolute; top: 48px; right: -12px;
+  font-size: 22px; color: var(--accent); z-index: 10;
+}
+.process-step:last-child .process-arrow { display: none; }
+
+/* CTA */
+.services-cta {
+  padding: 120px 48px;
+  background: var(--bg);
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+.services-cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(45,212,168,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(45,212,168,0.07) 0%, transparent 50%);
+}
+.services-cta .section-label {
+  font-family: 'Outfit', sans-serif; font-size: 12px;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+  display: inline-block; position: relative; z-index: 2;
+}
+.services-cta h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 8vw, 100px); line-height: 0.95;
+  margin-bottom: 24px; position: relative; z-index: 2;
+}
+.services-cta h2 .accent { color: var(--accent); }
+.services-cta p {
+  font-size: 16px; color: var(--text-dim);
+  margin-bottom: 48px; position: relative; z-index: 2;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 20px 52px; background: var(--accent);
+  color: #000; text-decoration: none;
+  font-family: 'Outfit', sans-serif; font-weight: 700;
+  font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+  transition: all 0.3s ease; position: relative; z-index: 2;
+}
+.cta-btn:hover { background: #fff; transform: translateY(-3px); }
+
+/* FOOTER */
+footer {
+  padding: 40px 48px;
+  background: var(--bg);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-company { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: 2px; margin-bottom: 6px; }
+.footer-info { display: flex; flex-wrap: wrap; gap: 0 20px; font-size: 12px; color: var(--text-dim); line-height: 2; }
+.footer-info span { white-space: nowrap; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+.footer-copyright { font-size: 11px; color: rgba(255,255,255,0.2); }
+.footer-sns { display: flex; gap: 16px; }
+.footer-sns a { color: rgba(255,255,255,0.25); text-decoration: none; transition: color 0.3s ease; display: flex; align-items: center; }
+.footer-sns a:hover { color: var(--accent); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .event-type-item { grid-template-columns: 60px 1fr 1fr; }
+  .eti-tags { display: none; }
+  .eti-arrow { display: none; }
+}
+@media (max-width: 968px) {
+  nav { padding: 16px 24px; }
+  .page-hero { padding: 0 24px 60px; }
+  .intro { grid-template-columns: 1fr; padding: 80px 24px; }
+  .intro-right { display: none; }
+  .intro-stats { grid-template-columns: repeat(3, 1fr); }
+  .event-types { padding: 80px 24px; }
+  .event-type-item { grid-template-columns: 1fr; gap: 12px; padding: 28px 24px; }
+  .eti-num { font-size: 24px; }
+  .eti-title { font-size: 28px; }
+  .eti-desc { display: none; }
+  .svc-block { padding: 60px 24px; }
+  .svc-block-header { gap: 20px; }
+  .svc-block-num { font-size: 60px; }
+  .svc-steps { grid-template-columns: 1fr 1fr; }
+  .svc-step-arrow { display: none; }
+  .highlight { padding: 80px 24px; }
+  .highlight-grid { grid-template-columns: repeat(3, 1fr); }
+  .process { padding: 80px 24px; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .process-arrow { display: none; }
+  .services-cta { padding: 80px 24px; }
+}
+@media (max-width: 600px) {
+  .nav-links { gap: 20px; }
+  .nav-links a { font-size: 11px; letter-spacing: 2px; }
+  .intro-stats { grid-template-columns: 1fr 1fr; }
+  .process-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">AROUND<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html" class="active">Services</a></li>
+    <li><a href="works.html">Works</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-bg-grid"></div>
+  <div class="hero-content">
+    <p class="hero-label">Event Planning & Operation</p>
+    <h1 class="hero-title">
+      <span class="outline">WE</span><br>
+      <span class="accent">PLAN</span><br>
+      <span class="outline">EVERYTHING</span>
+    </h1>
+    <p class="hero-sub">
+      축제부터 야간공연, 과학관광, 문화팝업까지.<br>
+      아이디어를 현장으로 만드는 이벤트 기획·운영 전문가.
+    </p>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-left reveal">
+    <p class="section-label">About Our Service</p>
+    <h2>기획에서 운영까지<br><span class="accent">원스톱</span>으로</h2>
+    <p>어라운드는 단순한 행사 대행사가 아닙니다. 브랜드의 목표를 이해하고, 그에 맞는 이벤트 전략을 수립하며, 현장 운영까지 책임집니다.</p>
+    <p>대전·충청을 기반으로 공공기관, 지자체, 문화기관과 함께 매년 10개 이상의 이벤트를 기획·운영하고 있습니다.</p>
+    <div class="intro-stats">
+      <div class="stat-box">
+        <div class="stat-num">10Y+</div>
+        <div class="stat-label">운영 경력</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">파트너사</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">91%</div>
+        <div class="stat-label">평균 만족도</div>
+      </div>
+    </div>
+  </div>
+  <div class="intro-right reveal">
+    <div class="intro-img-main"></div>
+    <div class="intro-img-badge">
+      <div class="badge-num">12</div>
+      <div class="badge-text">Team Members</div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENT TYPES -->
+<section class="event-types">
+  <div class="event-types-header reveal">
+    <p class="section-label">What We Plan</p>
+    <h2>EVENT <span class="accent">TYPES</span></h2>
+  </div>
+  <div class="event-type-list">
+
+    <a href="contact.html" class="event-type-item eti-festival reveal">
+      <div class="eti-num">01</div>
+      <div class="eti-title-wrap">
+        <div class="eti-title">FESTIVAL</div>
+        <div class="eti-sub">축제 · 페스티벌</div>
+      </div>
+      <div class="eti-desc">지역 대표 축제부터 테마 페스티벌까지. 기획·섭외·현장 운영·결과 분석을 원스톱으로 진행합니다. 청소년 진로, 독서문화, 재즈 등 다양한 테마 경험 보유.</div>
+      <div class="eti-tags">
+        <span class="eti-tag">청소년</span>
+        <span class="eti-tag">가족단위</span>
+        <span class="eti-tag">지역축제</span>
+        <span class="eti-tag">테마페스티벌</span>
+      </div>
+      <div class="eti-arrow">→</div>
+    </a>
+
+    <a href="contact.html" class="event-type-item eti-performance reveal">
+      <div class="eti-num">02</div>
+      <div class="eti-title-wrap">
+        <div class="eti-title">CULTURAL PERFORMANCE</div>
+        <div class="eti-sub">문화공연 · 야간행사</div>
+      </div>
+      <div class="eti-desc">야간 수목원 공연, 캔들라이트 콘서트, 다장르 공연 큐레이션. 공간의 특성과 관객 취향에 맞는 아티스트 섭외부터 무대 연출까지.</div>
+      <div class="eti-tags">
+        <span class="eti-tag">야간공연</span>
+        <span class="eti-tag">캔들라이트</span>
+        <span class="eti-tag">다장르</span>
+        <span class="eti-tag">아티스트섭외</span>
+      </div>
+      <div class="eti-arrow">→</div>
+    </a>
+
+    <a href="contact.html" class="event-type-item eti-science reveal">
+      <div class="eti-num">03</div>
+      <div class="eti-title-wrap">
+        <div class="eti-title">SCIENCE TOURISM</div>
+        <div class="eti-sub">과학관광 · 체험 프로그램</div>
+      </div>
+      <div class="eti-desc">대덕특구 정출연 10개 이상 기관 네트워크를 활용한 과학관광 투어. 관공서·학교·일반인 맞춤형 3트랙 운영, 해외 대표단 글로벌 프로그램 경험.</div>
+      <div class="eti-tags">
+        <span class="eti-tag">정출연연계</span>
+        <span class="eti-tag">교육관광</span>
+        <span class="eti-tag">글로벌</span>
+        <span class="eti-tag">2박3일캠프</span>
+      </div>
+      <div class="eti-arrow">→</div>
+    </a>
+
+    <a href="contact.html" class="event-type-item eti-night reveal">
+      <div class="eti-num">04</div>
+      <div class="eti-title-wrap">
+        <div class="eti-title">NIGHT TOURISM</div>
+        <div class="eti-sub">야간관광 · 피크닉 행사</div>
+      </div>
+      <div class="eti-desc">도심 속 야간 감성 콘텐츠 기획. 피크닉존 공간 연출, 웰컴키트 구성, 지역 특산물 연계, 사전예약 시스템까지. 딜라잇 대전 가을밤 피크닉 만족도 95.9%.</div>
+      <div class="eti-tags">
+        <span class="eti-tag">야간피크닉</span>
+        <span class="eti-tag">감성공간</span>
+        <span class="eti-tag">웰컴키트</span>
+        <span class="eti-tag">지역연계</span>
+      </div>
+      <div class="eti-arrow">→</div>
+    </a>
+
+    <a href="contact.html" class="event-type-item eti-culture reveal">
+      <div class="eti-num">05</div>
+      <div class="eti-title-wrap">
+        <div class="eti-title">MUSEUM · LIBRARY EVENT</div>
+        <div class="eti-sub">과학관 · 도서관 체험행사</div>
+      </div>
+      <div class="eti-desc">국립중앙과학관 계절별 행사, 서구 책 축제 등 공공시설 특화 이벤트. IP 활용, 팬덤문화 접목, AI 기술 도입 등 혁신적 콘텐츠로 매년 새로운 방문 동기 창출.</div>
+      <div class="eti-tags">
+        <span class="eti-tag">IP활용</span>
+        <span class="eti-tag">포토존</span>
+        <span class="eti-tag">스탬프투어</span>
+        <span class="eti-tag">팬덤문화</span>
+      </div>
+      <div class="eti-arrow">→</div>
+    </a>
+
+    <a href="contact.html" class="event-type-item eti-youth reveal">
+      <div class="eti-num">06</div>
+      <div class="eti-title-wrap">
+        <div class="eti-title">YOUTH & POPUP</div>
+        <div class="eti-sub">청년행사 · 팝업 이벤트</div>
+      </div>
+      <div class="eti-desc">지역 청년 창업가, 아티스트와 함께하는 문화팝업. 소규모 감성 공간 활용, 체험형·교류형 콘텐츠 설계. 두 차례 모두 만족도·재참가의향 100% 달성.</div>
+      <div class="eti-tags">
+        <span class="eti-tag">청년창업</span>
+        <span class="eti-tag">로컬마켓</span>
+        <span class="eti-tag">체험형</span>
+        <span class="eti-tag">감성팝업</span>
+      </div>
+      <div class="eti-arrow">→</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- SERVICE PROCESS -->
+<section class="svc-process">
+
+  <!-- 01 EVENT PLANNING -->
+  <div class="svc-block">
+    <div class="svc-block-header reveal">
+      <div class="svc-block-num">01</div>
+      <div>
+        <p class="svc-block-label">Service Process</p>
+        <h3 class="svc-block-title">EVENT <span class="accent">PLANNING</span></h3>
+        <p class="svc-block-sub">이벤트 기획 · 운영 프로세스</p>
+      </div>
+    </div>
+    <div class="svc-steps">
+      <div class="svc-step svc-01-01 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 01</div>
+          <div class="svc-step-name">클라이언트 브리핑</div>
+          <div class="svc-step-desc">목표 설정, 타겟 분석, 예산 협의. 과거 행사 데이터와 레퍼런스를 기반으로 방향성을 잡습니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-01-02 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 02</div>
+          <div class="svc-step-name">콘셉트 기획</div>
+          <div class="svc-step-desc">행사 테마, 프로그램 구성, 동선 설계. 참여자 경험을 중심으로 스토리라인을 설계합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-01-03 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 03</div>
+          <div class="svc-step-name">섭외 · 제작</div>
+          <div class="svc-step-desc">아티스트·강연자·파트너사 섭외, 무대·공간 제작, 키비주얼 디자인. 검증된 네트워크를 활용합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-01-04 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 04</div>
+          <div class="svc-step-name">현장 운영</div>
+          <div class="svc-step-desc">리허설, 당일 총괄 운영, 돌발상황 대응. 전담 인력이 현장을 책임집니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-01-05 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 05</div>
+          <div class="svc-step-name">결과 분석</div>
+          <div class="svc-step-desc">만족도 설문, 참여자 통계, 언론·SNS 바이럴 측정으로 성과를 입증합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 MARKETING & PR -->
+  <div class="svc-block svc-block-alt">
+    <div class="svc-block-header reveal">
+      <div class="svc-block-num">02</div>
+      <div>
+        <p class="svc-block-label">Service Process</p>
+        <h3 class="svc-block-title">MARKETING <span class="accent">&amp; PR</span></h3>
+        <p class="svc-block-sub">마케팅 · 홍보 프로세스</p>
+      </div>
+    </div>
+    <div class="svc-steps">
+      <div class="svc-step svc-02-01 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 01</div>
+          <div class="svc-step-name">채널 진단</div>
+          <div class="svc-step-desc">팔로워 분석, 경쟁사 비교. 블로그·인스타·유튜브·페이스북 채널별 성과를 진단합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-02-02 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 02</div>
+          <div class="svc-step-name">전략 수립</div>
+          <div class="svc-step-desc">연간 콘텐츠 캘린더, 계절형 키워드 전략, 채널별 역할 분리. 3트랙으로 설계합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-02-03 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 03</div>
+          <div class="svc-step-name">제작 · 업로드</div>
+          <div class="svc-step-desc">카드뉴스, 릴스·숏폼, 블로그 기사. 소셜기자단 운영으로 콘텐츠를 안정 공급합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-02-04 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 04</div>
+          <div class="svc-step-name">언론 · 바이럴</div>
+          <div class="svc-step-desc">보도자료 배포, 인플루언서 협업, 커뮤니티 홍보. 언론 보도 건수로 효과를 측정합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-02-05 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 05</div>
+          <div class="svc-step-name">월간 성과 보고</div>
+          <div class="svc-step-desc">채널별 수치 분석, 월간 보고서 제출. 데이터를 바탕으로 다음 달 전략을 반영합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 CONTENTS -->
+  <div class="svc-block">
+    <div class="svc-block-header reveal">
+      <div class="svc-block-num">03</div>
+      <div>
+        <p class="svc-block-label">Service Process</p>
+        <h3 class="svc-block-title">CONTENTS <span class="accent">CREATION</span></h3>
+        <p class="svc-block-sub">콘텐츠 제작 프로세스</p>
+      </div>
+    </div>
+    <div class="svc-steps">
+      <div class="svc-step svc-03-01 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 01</div>
+          <div class="svc-step-name">크리에이티브 브리핑</div>
+          <div class="svc-step-desc">브랜드 톤앤매너, 타겟 오디언스, 활용 채널 확인. 핵심 메시지를 먼저 정의합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-03-02 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 02</div>
+          <div class="svc-step-name">기획 · 스토리보드</div>
+          <div class="svc-step-desc">콘텐츠 구조 설계, 스크립트 작성, 촬영 콘티 제작. 사전 준비에 집중합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-03-03 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 03</div>
+          <div class="svc-step-name">촬영 · 디자인</div>
+          <div class="svc-step-desc">현장 사진·영상 촬영, 그래픽 디자인, 키비주얼 제작. 원스톱으로 제작합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-03-04 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 04</div>
+          <div class="svc-step-name">편집 · 후보정</div>
+          <div class="svc-step-desc">영상 편집, 색보정, 자막 삽입. 유튜브·릴스·쇼츠 등 채널 포맷으로 최적화합니다.</div>
+        </div>
+      </div>
+      <div class="svc-step-arrow">→</div>
+      <div class="svc-step svc-03-05 reveal">
+        <div class="svc-step-inner">
+          <div class="svc-step-num">STEP 05</div>
+          <div class="svc-step-name">납품 · 피드백</div>
+          <div class="svc-step-desc">최종 결과물 납품, 수정 대응, 원본 파일 아카이브. 성과 데이터를 다음 제작에 반영합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- HIGHLIGHT - 주요 실적 -->
+<section class="highlight">
+  <div class="highlight-header reveal">
+    <p class="section-label">Selected Projects</p>
+    <h2>SELECTED <span class="accent">PROJECTS</span></h2>
+  </div>
+  <div class="highlight-grid">
+
+    <a href="works.html" class="highlight-card reveal">
+      <div class="hl-img" style="background-image: url('works1.png'); background-color: #1a1a1a;"></div>
+      <div class="hl-overlay"></div>
+      <div class="hl-info">
+        <div class="hl-badge">Festival · 2025</div>
+        <div class="hl-title">제11회 청소년 나Be한마당</div>
+      </div>
+    </a>
+
+    <a href="works.html" class="highlight-card reveal">
+      <div class="hl-img" style="background-image: url('works2.png'); background-color: #1a1a1a;"></div>
+      <div class="hl-overlay"></div>
+      <div class="hl-info">
+        <div class="hl-badge">Event · 2025</div>
+        <div class="hl-title">약의날 기념행사</div>
+      </div>
+    </a>
+
+    <a href="works.html" class="highlight-card reveal">
+      <div class="hl-img" style="background-image: url('works3.png'); background-color: #1a1a1a;"></div>
+      <div class="hl-overlay"></div>
+      <div class="hl-info">
+        <div class="hl-badge">Cultural Performance · 2025</div>
+        <div class="hl-title">국립세종수목원 야간개장 '우리함께夜'</div>
+      </div>
+    </a>
+
+    <a href="works.html" class="highlight-card reveal">
+      <div class="hl-img" style="background-image: url('works4.png'); background-color: #1a1a1a;"></div>
+      <div class="hl-overlay"></div>
+      <div class="hl-info">
+        <div class="hl-badge">Culture · 2025</div>
+        <div class="hl-title">서구 책 축제<br>'서로(書路) 더 가까이'</div>
+      </div>
+    </a>
+
+    <a href="works.html" class="highlight-card reveal">
+      <div class="hl-img" style="background-image: url('works5.png'); background-color: #1a1a1a;"></div>
+      <div class="hl-overlay"></div>
+      <div class="hl-info">
+        <div class="hl-badge">Festival · 2025</div>
+        <div class="hl-title">엑스포과학공원<br>사계절 행사</div>
+      </div>
+    </a>
+
+    <a href="works.html" class="highlight-card reveal">
+      <div class="hl-img" style="background-image: url('works6.png'); background-color: #1a1a1a;"></div>
+      <div class="hl-overlay"></div>
+      <div class="hl-info">
+        <div class="hl-badge">Science Tourism · 2025</div>
+        <div class="hl-title">K-사이언스월드<br>과학관광 프로그램</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <p class="section-label reveal">How We Work</p>
+  <h2 class="reveal">OUR <span class="accent">PROCESS</span></h2>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="process-arrow">→</div>
+      <div class="process-step-num">01</div>
+      <div class="process-step-title">DISCOVERY</div>
+      <div class="process-step-desc">클라이언트의 목표와 타겟을 깊이 이해하고 프로젝트의 방향을 설정합니다. 레퍼런스 분석과 현장 인사이트를 바탕으로 시작합니다.</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-arrow">→</div>
+      <div class="process-step-num">02</div>
+      <div class="process-step-title">STRATEGY</div>
+      <div class="process-step-desc">데이터와 경험을 바탕으로 최적의 이벤트 전략과 콘셉트를 기획합니다. 예산 배분부터 프로그램 구성까지 설계합니다.</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-arrow">→</div>
+      <div class="process-step-num">03</div>
+      <div class="process-step-title">EXECUTION</div>
+      <div class="process-step-desc">검증된 파트너사와 함께 안전하고 완성도 높은 현장 운영을 보장합니다. 돌발상황 대응 매뉴얼도 사전에 구축합니다.</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-step-num">04</div>
+      <div class="process-step-title">REVIEW</div>
+      <div class="process-step-desc">만족도 조사·언론 분석·SNS 바이럴 측정으로 결과를 입증하고, 다음 프로젝트에 인사이트를 반영합니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="services-cta">
+  <p class="section-label reveal">Ready to Start?</p>
+  <h2 class="reveal">LET'S MAKE<br><span class="accent">SOMETHING</span><br>GREAT</h2>
+  <p class="reveal">새로운 이벤트를 기획하고 싶으시다면 언제든지 연락해주세요.</p>
+  <a href="contact.html" class="cta-btn reveal">문의하기 →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-company">AROUND.</div>
+    <div class="footer-info"><span>대전광역시 유성구 농대로 2번길 23, 1층</span></div>
+    <div class="footer-info"><span>TEL. 042-551-5974</span><span>E-MAIL. weare@aroundkorea.kr</span></div>
+    <div class="footer-info"><span>사업자등록번호 : 296-87-00825</span><span>대표 : 강병진</span></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">© 2026 AROUND. All rights reserved.</span>
+      <div class="footer-sns">
+        <a href="https://www.instagram.com/aroundkorea_/" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.youtube.com/@aroundkorea4661" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+</script>
+</body>
+</html>
