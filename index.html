@@ -555,7 +555,7 @@ footer {
   <div class="works-grid">
     <!-- 1. 나Be한마당 -->
     <div class="work-item reveal">
-      <div class="work-img" style="background-image: url('works1.png');"></div>
+      <div class="work-img" style="background-image: url('images/2025_works1.png');"></div>
       <div class="work-overlay"></div>
       <div class="work-info">
         <div class="work-title">제11회 청소년 나Be한마당</div>
@@ -563,7 +563,7 @@ footer {
     </div>
     <!-- 2. 약의날 행사 -->
     <div class="work-item reveal">
-      <div class="work-img" style="background-image: url('works2.png'); background-color: #1a1a1a;"></div>
+      <div class="work-img" style="background-image: url('images/2025_works2.png'); background-color: #1a1a1a;"></div>
       <div class="work-overlay"></div>
       <div class="work-info">
         <div class="work-title">약의날 기념행사</div>
@@ -571,7 +571,7 @@ footer {
     </div>
     <!-- 3. 국립세종수목원 야간공연 -->
     <div class="work-item reveal">
-      <div class="work-img" style="background-image: url('works3.png'); background-color: #1a1a1a;"></div>
+      <div class="work-img" style="background-image: url('images/2025_works3.png'); background-color: #1a1a1a;"></div>
       <div class="work-overlay"></div>
       <div class="work-info">
         <div class="work-title">야간개장 '우리함께夜' 문화공연</div>
@@ -579,7 +579,7 @@ footer {
     </div>
     <!-- 4. 서구 책 축제 -->
     <div class="work-item reveal">
-      <div class="work-img" style="background-image: url('works4.png'); background-color: #1a1a1a;"></div>
+      <div class="work-img" style="background-image: url('images/2025_works4.png'); background-color: #1a1a1a;"></div>
       <div class="work-overlay"></div>
       <div class="work-info">
         <div class="work-title">서구 책 축제</div>
@@ -587,7 +587,7 @@ footer {
     </div>
     <!-- 5. 엑스포 재즈 페스티벌 -->
     <div class="work-item reveal">
-      <div class="work-img" style="background-image: url('works5.png'); background-color: #1a1a1a;"></div>
+      <div class="work-img" style="background-image: url('images/2025_works5.png'); background-color: #1a1a1a;"></div>
       <div class="work-overlay"></div>
       <div class="work-info">
         <div class="work-title">엑스포과학공원 사계절 행사</div>
@@ -595,7 +595,7 @@ footer {
     </div>
     <!-- 6. K-사이언스월드 -->
     <div class="work-item reveal">
-      <div class="work-img" style="background-image: url('works6.png'); background-color: #1a1a1a;"></div>
+      <div class="work-img" style="background-image: url('images/2025_works6.png'); background-color: #1a1a1a;"></div>
       <div class="work-overlay"></div>
       <div class="work-info">
         <div class="work-title">K-사이언스월드 과학관광 프로그램</div>
@@ -665,8 +665,13 @@ const observer = new IntersectionObserver((entries) => {
       observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// 폴백: 3초 후에도 visible 안된 reveal 요소 강제 표시
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+}, 3000);
 </script>
 <script>
 // ============================================================
