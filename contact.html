@@ -221,7 +221,7 @@
       </div>
       <div class="contact-item">
         <span class="contact-item-label">Email</span>
-        <span class="contact-item-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afd8caceddcaefceddc0dac1cbc4c0ddcace81c4dd">[email&#160;protected]</a></span>
+        <span class="contact-item-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dfa8babeadba9fbeadb0aab1bbb4b0adbabef1b4ad">[email&#160;protected]</a></span>
       </div>
       <div class="contact-item">
         <span class="contact-item-label">SNS</span>
@@ -272,7 +272,7 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const glow = document.getElementById('cursorGlow');
 document.addEventListener('mousemove', e => {
   glow.style.left = e.clientX + 'px';
@@ -286,4 +286,17 @@ window.addEventListener('scroll', () => {
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
-    if (en
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+}, 3000);
+</script>
+</body>
+</html>
