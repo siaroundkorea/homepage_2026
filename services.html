@@ -287,6 +287,23 @@ nav.scrolled { padding: 16px 48px; background: rgba(10,10,10,0.95); }
 }
 .svc-block-sub { font-size: 14px; color: var(--text-dim); letter-spacing: 2px; }
 
+.svc-block-body {
+  max-width: 760px; font-size: 15px; line-height: 1.9;
+  color: var(--text-dim);
+}
+.svc-block-body p { margin-bottom: 24px; }
+.svc-text-link {
+  font-family: 'Outfit', sans-serif; font-weight: 600;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); text-decoration: none;
+  position: relative; display: inline-block;
+}
+.svc-text-link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 2px; background: var(--accent); transition: width 0.3s ease;
+}
+.svc-text-link:hover::after { width: 100%; }
+
 /* 가로 5칸 그리드 */
 .svc-steps {
   display: grid;
@@ -565,8 +582,10 @@ footer {
   .services-cta { padding: 80px 24px; }
 }
 @media (max-width: 600px) {
-  .nav-links { gap: 20px; }
-  .nav-links a { font-size: 11px; letter-spacing: 2px; }
+  nav { padding: 16px 14px; }
+  .logo { font-size: 20px; }
+  .nav-links { gap: 8px; }
+  .nav-links a { font-size: 10px; letter-spacing: 0.5px; }
   .intro-stats { grid-template-columns: 1fr 1fr; }
   .process-steps { grid-template-columns: 1fr; }
 }
@@ -583,6 +602,7 @@ footer {
     <li><a href="about.html">About</a></li>
     <li><a href="services.html" class="active">Services</a></li>
     <li><a href="works.html">Works</a></li>
+    <li><a href="https://aroundrental.com" target="_blank" rel="noopener">Rental</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
@@ -748,7 +768,7 @@ footer {
 <section class="svc-process">
 
   <!-- 01 EVENT PLANNING -->
-  <div class="svc-block">
+  <div class="svc-block" id="event">
     <div class="svc-block-header reveal">
       <div class="svc-block-num">01</div>
       <div>
@@ -801,7 +821,7 @@ footer {
   </div>
 
   <!-- 02 MARKETING & PR -->
-  <div class="svc-block svc-block-alt">
+  <div class="svc-block svc-block-alt" id="marketing">
     <div class="svc-block-header reveal">
       <div class="svc-block-num">02</div>
       <div>
@@ -854,7 +874,7 @@ footer {
   </div>
 
   <!-- 03 CONTENTS -->
-  <div class="svc-block">
+  <div class="svc-block" id="contents">
     <div class="svc-block-header reveal">
       <div class="svc-block-num">03</div>
       <div>
@@ -903,6 +923,22 @@ footer {
           <div class="svc-step-desc">최종 결과물 납품, 수정 대응, 원본 파일 아카이브. 성과 데이터를 다음 제작에 반영합니다.</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- 04 RENTAL -->
+  <div class="svc-block svc-block-alt" id="rental">
+    <div class="svc-block-header reveal">
+      <div class="svc-block-num">04</div>
+      <div>
+        <p class="svc-block-label">Rental Platform</p>
+        <h3 class="svc-block-title">AROUND <span class="accent">RENTAL</span></h3>
+        <p class="svc-block-sub">행사용품 렌탈 플랫폼</p>
+      </div>
+    </div>
+    <div class="svc-block-body reveal">
+      <p>축제·박람회·팝업스토어 등 행사에 필요한 용품을 온라인에서 직접 보고 예약할 수 있는 렌탈 플랫폼입니다. 몽골텐트, 테이블, 의자를 비롯한 품목을 사진과 규격으로 확인한 뒤 날짜를 선택해 예약과 결제까지 한 번에 진행할 수 있습니다. 견적 문의부터 배송·설치까지 이어지던 과정을 온라인으로 옮겨, 필요한 순간에 바로 준비할 수 있도록 만들었습니다.</p>
+      <a href="https://aroundrental.com" target="_blank" rel="noopener" class="svc-text-link">aroundrental.com →</a>
     </div>
   </div>
 

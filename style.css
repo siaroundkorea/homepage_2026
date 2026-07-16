@@ -327,6 +327,8 @@ footer {
 }
 
 @media (max-width: 600px) {
-  .nav-links { gap: 20px; }
-  .nav-links a { font-size: 11px; letter-spacing: 2px; }
+  nav { padding: 16px 14px; }
+  .logo { font-size: 20px; }
+  .nav-links { gap: 8px; }
+  .nav-links a { font-size: 10px; letter-spacing: 0.5px; }
 }

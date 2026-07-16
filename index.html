@@ -192,7 +192,7 @@ nav.scrolled { padding: 16px 48px; background: rgba(10,10,10,0.95); }
 }
 .home-services h2 .accent { color: var(--accent); }
 .services-preview-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
 }
 .service-preview-card {
   padding: 60px 40px; background: var(--bg);
@@ -221,6 +221,7 @@ nav.scrolled { padding: 16px 48px; background: rgba(10,10,10,0.95); }
 .svc-event::before  { background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=900&q=80'); }
 .svc-marketing::before { background-image: url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=900&q=80'); }
 .svc-contents::before  { background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&q=80'); }
+.svc-rental::before    { background-image: url('https://images.unsplash.com/photo-1478147427282-58a87a120781?w=900&q=80'); }
 
 .svc-bg {
   position: absolute; top: 40px; left: 40px;
@@ -384,6 +385,9 @@ footer {
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* RESPONSIVE */
+@media (max-width: 1200px) {
+  .services-preview-grid { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 968px) {
   nav { padding: 16px 24px; }
   .home-services, .home-works, .contact-teaser { padding: 80px 24px; }
@@ -396,12 +400,16 @@ footer {
   .works-header { flex-direction: column; align-items: flex-start; gap: 24px; }
 }
 @media (max-width: 600px) {
-  .nav-links { gap: 20px; }
-  .nav-links a { font-size: 11px; letter-spacing: 2px; }
+  nav { padding: 16px 14px; }
+  .logo { font-size: 20px; }
+  .nav-links { gap: 8px; }
+  .nav-links a { font-size: 10px; letter-spacing: 0.5px; }
 }
 @media (max-width: 600px) {
-  .nav-links { gap: 20px; }
-  .nav-links a { font-size: 11px; letter-spacing: 2px; }
+  nav { padding: 16px 14px; }
+  .logo { font-size: 20px; }
+  .nav-links { gap: 8px; }
+  .nav-links a { font-size: 10px; letter-spacing: 0.5px; }
 }
 
 /* === HERO GAME === */
@@ -465,6 +473,7 @@ footer {
     <li><a href="about.html">About</a></li>
     <li><a href="services.html">Services</a></li>
     <li><a href="works.html">Works</a></li>
+    <li><a href="https://aroundrental.com" target="_blank" rel="noopener">Rental</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
@@ -542,6 +551,13 @@ footer {
       <div class="svc-icon"><svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="24" rx="2"/><polygon points="20,16 20,30 32,23"/></svg></div>
       <div class="svc-title">CONTENTS</div>
       <div class="svc-desc">영상, 사진, 그래픽 디자인, 웹 콘텐츠 제작</div>
+    </a>
+    <a href="https://aroundrental.com" target="_blank" rel="noopener" class="service-preview-card svc-rental reveal">
+      <div class="svc-bg">REN<br>TAL</div>
+      <div class="svc-num">04</div>
+      <div class="svc-icon"><svg viewBox="0 0 48 48"><path d="M24 6L6 20v22h36V20z"/><path d="M4 21L24 6l20 15"/><path d="M18 42V28h12v14"/></svg></div>
+      <div class="svc-title">RENTAL</div>
+      <div class="svc-desc">행사용품 렌탈 플랫폼 '어라운드렌탈' — 몽골텐트·테이블·의자 온라인 예약</div>
     </a>
   </div>
 </section>
